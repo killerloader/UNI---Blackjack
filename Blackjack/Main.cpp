@@ -13,4 +13,6 @@ int main()
 
 	//Run the function in the Game object which has the game loop in it.
 	GameObj.Run();
+
+	return 0;
 }

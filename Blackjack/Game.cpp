@@ -16,7 +16,7 @@
 //Game class constructor with initializer list for Deck class object which needs to call its constructor.
 Game::Game()
 {
-	//Create classes
+	//Create class pointers
 	m_gameDeck = new Deck(1);
 }
 
@@ -46,13 +46,13 @@ void Game::Run()
 
 		//Clear screen to black (by default)
 		m_window.clear();
+
 		//Actually draw stuff.
 		Draw();
+
 		//Draw screen buffer now that everything has been drawn to it.
 		m_window.display();
-		
 	}
-
 }
 
 //A separate function for drawing, just to split up the main function.

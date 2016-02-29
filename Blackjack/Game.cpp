@@ -12,6 +12,7 @@
 
 #include "Game.h"
 #include "Deck.h"
+#include "Resources.h"
 
 //Game class constructor with initializer list for Deck class object which needs to call its constructor.
 Game::Game()
@@ -33,6 +34,10 @@ void Game::Run()
 	//Creates a window that will be used for displaying sprites.
 	m_window.create(sf::VideoMode(640, 480), "Blackjack");
 
+	Resources Rtest;
+	Rtest.loadComplete();
+	sf::Sprite test(*Rtest.findTexture("Cards"));
+
 	//Game loop
 	while (m_window.isOpen())
 	{
@@ -49,6 +54,8 @@ void Game::Run()
 
 		//Actually draw stuff.
 		Draw();
+
+		m_window.draw(test);
 
 		//Draw screen buffer now that everything has been drawn to it.
 		m_window.display();

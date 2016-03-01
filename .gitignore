@@ -24,3 +24,8 @@ Blackjack/Game/Player.obj
 Blackjack/Game/vc140.idb
 Blackjack/Game/vc140.pdb
 *.obj
+*.iobj
+*.ipdb
+*.log
+*.pdb
+*.tlog

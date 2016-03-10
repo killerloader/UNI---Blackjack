@@ -2,7 +2,6 @@
 #include <SFML/Graphics.hpp>
 
 class Deck;
-class Person;
 
 //Game class definition.
 class Game

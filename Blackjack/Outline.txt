@@ -1,0 +1,2 @@
+- Player hits or stands, keeps playing until stands or goes bust, if goes bust you lose straight away.
+- After player has used "stand", the dealer will play until it either is higher than the player, or it goes bust (simple AI)

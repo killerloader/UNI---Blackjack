@@ -1,5 +1,7 @@
 #pragma once
-class Dealer
+#include "Person.h"
+
+class Dealer : public Person
 {
 public:
 	Dealer();

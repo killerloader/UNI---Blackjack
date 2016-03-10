@@ -9,12 +9,20 @@ class Card;
 class Deck
 {
 public:
-	Deck(int);
+	Deck();
 	~Deck();
 
-	void TakeFromDeck(Deck &otherDeck, bool random);
+	void takeFromDeck(Deck &otherDeck, int ID = -1);
+	void generateMainDeck();
+	void clearMyDeck();
+	int getCard(int ID);
+	int getCardAmount();
+	const char* getCardName(int ID);
+	Card* takeCard();
+	void addCard(Card*);//Could be reference to a pointer, but not much point.
+	int calculateTotal();
 
 private:
-	std::vector<Card> m_myDeck;
+	std::vector<Card*> m_myDeck;
 };
 

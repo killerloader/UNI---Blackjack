@@ -1,8 +1,8 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 
-
 class Deck;
+class Person;
 
 //Game class definition.
 class Game
@@ -14,6 +14,9 @@ public:
 	void Run();
 	void Draw();
 
+	Deck* getGameDeck();
+
+private:
 	Deck* m_gameDeck;
 
 	sf::RenderWindow m_window;

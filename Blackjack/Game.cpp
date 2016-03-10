@@ -12,13 +12,17 @@
 
 #include "Game.h"
 #include "Deck.h"
+#include "Player.h"
+#include "Dealer.h"
 #include "Resources.h"
 
 //Game class constructor with initializer list for Deck class object which needs to call its constructor.
 Game::Game()
 {
 	//Create class pointers
-	m_gameDeck = new Deck(1);
+	m_gameDeck = new Deck();
+	m_gameDeck->generateMainDeck();
+	//testDeck->takeFromDeck(*m_gameDeck);
 }
 
 //Game class destructor
@@ -37,7 +41,6 @@ void Game::Run()
 	Resources Rtest;
 	Rtest.loadComplete();
 	sf::Sprite test(*Rtest.findTexture("Cards"));
-
 	//Game loop
 	while (m_window.isOpen())
 	{
@@ -66,4 +69,9 @@ void Game::Run()
 void Game::Draw()
 {
 	
+}
+
+Deck* Game::getGameDeck()
+{
+	return m_gameDeck;
 }

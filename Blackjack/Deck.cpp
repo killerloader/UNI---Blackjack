@@ -16,10 +16,16 @@ Deck::~Deck()
 //If ID is left as -1, it will take the last card from the deck.
 //otherwise it will take the card at the index "ID" in the vector.
 //could also call this 'drawCard'
+//Will remove a card from this deck and return a pointer to its memory.
+//If this is used the in wrong place, the memory of the card will never get deleted, as it will return the pointer.
 void Deck::takeFromDeck(Deck &otherDeck, int ID)
 {
-	//Take card from other deck and add it to own with a pointer.
-	m_myDeck.push_back(otherDeck.takeCard());
+	if (m_myDeck.size() < 0)
+		return;
+	Card* tempCardPtr = m_myDeck[m_myDeck.size() - 1];
+	m_myDeck.erase(m_myDeck.begin() + m_myDeck.size() - 1);//Delete last card.
+	
+	m_myDeck.push_back(tempCardPtr);
 }
 
 //Calculate the total of the cards.
@@ -31,21 +37,10 @@ int Deck::calculateTotal()
 }
 
 //Might not be used as we may only ever move from deck to deck.
-void Deck::addCard(Card*)
+//Creates a new card out of nothingness
+void Deck::addCard(int CID)
 {
-	//Probably only e
-}
-
-//Will remove a card from this deck and return a pointer to its memory.
-//If this is used the in wrong place, the memory of the card will never get deleted.
-Card* Deck::takeCard()
-{
-	if (m_myDeck.size() < 0)
-		return nullptr;
-	Card* tempCardPtr= m_myDeck[m_myDeck.size() - 1];
-	//Here
-	m_myDeck.erase(m_myDeck.begin() + m_myDeck.size() - 1);//Delete last card.
-	return tempCardPtr;
+	m_myDeck.emplace_back(CID);
 }
 
 int Deck::getCard(int ID)

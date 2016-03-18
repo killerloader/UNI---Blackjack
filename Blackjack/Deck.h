@@ -18,8 +18,7 @@ public:
 	int getCard(int ID);
 	int getCardAmount();
 	const char* getCardName(int ID);
-	Card* takeCard();
-	void addCard(Card*);//Could be reference to a pointer, but not much point.
+	void addCard(int CID);//Could be reference to a pointer, but not much point.
 	int calculateTotal();
 
 private:

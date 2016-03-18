@@ -21,5 +21,4 @@ void Person::Stand()
 void Person::Hit()
 {
 	m_myDeck->takeFromDeck(*GRef.getGameDeck());
-
 }

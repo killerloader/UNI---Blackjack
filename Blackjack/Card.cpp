@@ -13,12 +13,22 @@ Card::Card(int cardId)
 	std::cout << m_myName << std::endl;
 }
 
+Card::Card(Card &Ocard)
+{
+	*this = Ocard;//Use = copy operator to copy Ocard into this card.
+}
+
 void Card::generateName(int cardID)
 {
 	char* suit_;
-	int totalLen = 0;
+	char* card_;
+	int totalLen(0), suitLen(0), cardLen(0);
+	m_cardId = cardID;
+	m_cardSuit = floor(m_cardId / 13);
+	m_cardNum = m_cardId - m_cardSuit*13;
+
 	//clubs, spades, hearts, diamonds
-	switch ((int)floor((float)cardID / 13))
+	switch (m_cardSuit)
 	{
 	case 0:suit_ = new char[6]{ "clubs" }; break;
 	case 1:suit_ = new char[7]{ "spades" }; break;
@@ -27,11 +37,10 @@ void Card::generateName(int cardID)
 	default:suit_ = new char[6]{ "ERROR" }; break;
 	}
 
-	int suitLen = strlen(suit_);
+	suitLen = strlen(suit_);
 	totalLen += strlen(suit_);
-	char* card_;
-
-	switch (cardID - (int)floor((float)cardID / 13) * 13)
+	
+	switch (m_cardNum)
 	{
 	case 0:card_ = new char[4]{ "Ace" }; break;
 	case 1:card_ = new char[2]{ "2" }; break;
@@ -49,12 +58,12 @@ void Card::generateName(int cardID)
 	default:card_ = new char[6]{ "ERROR" }; break;
 	}
 
-	int cardLen = strlen(card_);
+	cardLen = strlen(card_);
 	totalLen += strlen(card_);//Don't include null terminator as we wilkl only need that at the end.
-	totalLen += strlen(" of ") + 1;//The extra length for spaces, "of" and the null terminator.
+	totalLen += strlen(" of ") + 1;//The extra length for " of " and the null terminator.
 
 	if (m_myName != nullptr)
-		delete[] m_myName;
+		delete[] m_myName;//Delete old card name if this is called for a second time (unlikely)
 
 	m_myName = new char[totalLen];
 	strcpy_s(m_myName, totalLen, card_);
@@ -68,6 +77,11 @@ void Card::generateName(int cardID)
 int Card::getCardId()
 {
 	return m_cardId;
+}
+
+int Card::getCardValue()
+{
+	return m_cardNum;
 }
 
 const char* Card::getName()

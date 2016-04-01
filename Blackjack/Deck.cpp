@@ -43,6 +43,7 @@ void Deck::addCard(int CID)
 	m_myDeck.push_back(new Card(CID));
 }
 
+//Returns the card ID
 int Deck::getCard(int ID)
 {
 	if (ID<0 || (unsigned int)ID>m_myDeck.size())

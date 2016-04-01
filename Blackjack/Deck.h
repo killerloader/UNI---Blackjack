@@ -1,5 +1,10 @@
 #pragma once
 
+/*
+	ToDO:
+		- Overload [] (subscript) operator to  get cards in deck.
+*/
+
 #include <vector>
 
 //Card class pre-declaration, so that Deck can see Card.

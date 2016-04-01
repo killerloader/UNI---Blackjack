@@ -19,7 +19,7 @@ void Resources::loadComplete()
 //Uses a RenderTexture / Surface to create cards and then save them as a normal texture.
 void Resources::renderCard(int CardID)
 {
-	int CardType = (int)floor(CardID / 13);//Suit of card (0 = Clubs, 1 = Spades, 2 = Hearts, 3 = Diamonds)
+	int CardType = CardID / 13;//Suit of card (0 = Clubs, 1 = Spades, 2 = Hearts, 3 = Diamonds)
 }
 
 void Resources::loadTexture(const char* FileName, const char* TextureName)

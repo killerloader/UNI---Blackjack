@@ -40,19 +40,19 @@ int Deck::calculateTotal()
 //Creates a new card out of nothingness
 void Deck::addCard(int CID)
 {
-	m_myDeck.emplace_back(CID);
+	m_myDeck.push_back(new Card(CID));
 }
 
 int Deck::getCard(int ID)
 {
-	if (ID<0 || ID>m_myDeck.size())
+	if (ID<0 || (unsigned int)ID>m_myDeck.size())
 		return -1;
 	return m_myDeck[ID]->getCardId();
 }
 
 const char* Deck::getCardName(int ID)
 {
-	if (ID<0 || ID>m_myDeck.size() - 1)
+	if (ID<0 || (unsigned int)ID>m_myDeck.size() - 1)
 		return "Card Doesn't Exist\0";
 	return m_myDeck[ID]->getName();
 }

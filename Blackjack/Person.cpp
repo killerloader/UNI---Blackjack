@@ -1,5 +1,6 @@
 #include "Person.h"
 #include "Deck.h"
+#include "Game.h"
 #include <iostream>
 
 Person::Person(Game& GmRef) : GRef(GmRef)

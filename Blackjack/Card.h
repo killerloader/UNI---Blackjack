@@ -15,7 +15,7 @@ public:
 			delete[] m_myName;//Delete old card name if it is already created (pretty much certain)
 		
 		m_cardId = Ocard.getCardId();
-		m_cardSuit = floor(m_cardId / 13);
+		m_cardSuit = m_cardId / 13;
 		m_cardNum = m_cardId - m_cardSuit * 13;
 	}
 	~Card();

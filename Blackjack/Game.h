@@ -1,5 +1,6 @@
 #pragma once
 #include <SFML/Graphics.hpp>
+#include "Resources.h"
 
 class Deck;
 
@@ -15,6 +16,7 @@ public:
 
 	Deck* getGameDeck();
 
+	Resources m_gameResources;
 private:
 	Deck* m_gameDeck;
 

@@ -13,7 +13,7 @@ int main()
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 	
 	//Randomize srand so that the deck is always different.
-	srand(time(0));
+	srand((unsigned int)time(0));
 
 	//Create the main game object.
 	Game GameObj;

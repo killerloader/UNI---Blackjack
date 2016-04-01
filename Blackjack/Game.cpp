@@ -19,8 +19,11 @@
 //Game class constructor with initializer list for Deck class object which needs to call its constructor.
 Game::Game()
 {
+	for (int i = 0; i < 52; i++)
+		m_gameResources.renderCard(i);
+
 	//Create class pointers
-	m_gameDeck = new Deck();
+	m_gameDeck = new Deck(this);
 	m_gameDeck->generateMainDeck();
 	//testDeck->takeFromDeck(*m_gameDeck);
 }
@@ -38,9 +41,8 @@ void Game::Run()
 	//Creates a window that will be used for displaying sprites.
 	m_window.create(sf::VideoMode(640, 480), "Blackjack");
 
-	Resources Rtest;
-	Rtest.loadComplete();
-	sf::Sprite test(*Rtest.findTexture("Cards"));
+	//Rtest.loadComplete();
+	sf::Sprite test(*m_gameResources.findTexture("Cards"));
 	//Game loop
 	while (m_window.isOpen())
 	{

@@ -1,11 +1,14 @@
 #pragma once
 
+#include<SFML/Graphics.hpp>
+
 //Remember the RUle of three!
+class Game;
 
 class Card
 {
 public:
-	Card(int cardId);
+	Card(int cardId, Game *gamePtr_);
 
 	//Probably wont be used, but for the rule of three.
 	Card::Card(Card &Ocard);//Copy constructor.
@@ -15,7 +18,7 @@ public:
 			delete[] m_myName;//Delete old card name if it is already created (pretty much certain)
 		
 		m_cardId = Ocard.getCardId();
-		m_cardSuit = floor(m_cardId / 13);
+		m_cardSuit = m_cardId / 13;
 		m_cardNum = m_cardId - m_cardSuit * 13;
 	}
 	~Card();
@@ -30,5 +33,7 @@ private:
 	int m_cardNum;//2 - 10, ace, jack, queen or king. (0-12)
 	int m_cardSuit;
 	char *m_myName;
+	Game *m_gamePtr;
+	sf::Sprite mySprite;
 };
 

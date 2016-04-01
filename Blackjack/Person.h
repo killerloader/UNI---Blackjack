@@ -1,17 +1,20 @@
 #pragma once
-#include "Game.h"
+
+//Needed?
+class Game;
+class Deck;
 
 class Person
 {
 public:
-	Person(Game& GmRef);
+	Person();
 	~Person();
 
 	void Stand();
 	void Hit();
 
 protected:
-	Game &GRef;
 	Deck* m_myDeck;
+	Game* m_gamePtr;
 };
 

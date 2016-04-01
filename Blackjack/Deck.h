@@ -2,25 +2,27 @@
 
 #include <vector>
 
-//Card class pre-declaration, so that Deck can see Card.
+//Card/ Game class pre-declaration.
 class Card;
+class Game;
 
 //Deck class - Will handle multiple cards for players or for the game deck.
 class Deck
 {
 public:
-	Deck();
+	Deck(Game *gamePtr_);
 	~Deck();
 
 	void takeFromDeck(Deck &otherDeck, int ID = -1);
 	void generateMainDeck();
 	void clearMyDeck();
-	int getCard(int ID);
-	int getCardAmount();
-	const char* getCardName(int ID);
+	int getCard(unsigned int ID) const;
+	int getCardAmount() const;
+	const char* getCardName(unsigned int ID) const;
 	void addCard(int CID);//Could be reference to a pointer, but not much point.
-	int calculateTotal();
+	int calculateTotal() const;
 
+	Game *m_gamePtr;
 private:
 	std::vector<Card*> m_myDeck;
 };

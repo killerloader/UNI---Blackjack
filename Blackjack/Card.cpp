@@ -1,9 +1,12 @@
 #include "Card.h"
+#include "Game.h"
 #include <iostream>
+#include <sstream>
 #include <math.h>
 
-Card::Card(int cardId)
+Card::Card(int cardId, Game *gamePtr_)
 {
+	m_gamePtr = gamePtr_;
 	m_myName = nullptr;
 	//m_myName[0] = 5;
 	m_cardId = cardId;
@@ -16,6 +19,7 @@ Card::Card(int cardId)
 Card::Card(Card &Ocard)
 {
 	*this = Ocard;//Use = copy operator to copy Ocard into this card.
+	//TODO: Create proper copy constructor.
 }
 
 void Card::generateName(int cardID)
@@ -24,7 +28,7 @@ void Card::generateName(int cardID)
 	char* card_;
 	int totalLen(0), suitLen(0), cardLen(0);
 	m_cardId = cardID;
-	m_cardSuit = floor(m_cardId / 13);
+	m_cardSuit = m_cardId / 13;
 	m_cardNum = m_cardId - m_cardSuit*13;
 
 	//clubs, spades, hearts, diamonds
@@ -72,6 +76,11 @@ void Card::generateName(int cardID)
 
 	delete[] card_;
 	delete[] suit_;
+
+	std::stringstream tempstream;
+	tempstream << "Card:" << cardID;
+	//tempstream
+	mySprite.setTexture(*m_gamePtr->m_gameResources.findTexture(tempstream.str().c_str()));
 }
 
 int Card::getCardId()

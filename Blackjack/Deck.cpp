@@ -1,10 +1,11 @@
 #include "Deck.h"
 #include "Card.h"
+#include "Game.h"
 #include <iostream>
 
-Deck::Deck()
+Deck::Deck(Game *gamePtr_)
 {
-
+	m_gamePtr = gamePtr_;
 }
 
 Deck::~Deck()
@@ -31,7 +32,7 @@ void Deck::takeFromDeck(Deck &otherDeck, int ID)
 //Calculate the total of the cards.
 //This is a separate function and not just a variable that iterates
 //due to the ace being either 1 or 11
-int Deck::calculateTotal()
+int Deck::calculateTotal() const
 {
 	return 10;//Not done yet.
 }
@@ -40,24 +41,25 @@ int Deck::calculateTotal()
 //Creates a new card out of nothingness
 void Deck::addCard(int CID)
 {
-	m_myDeck.emplace_back(CID);
+	//Can't use emplace_back because is a vector of pointers.
+	m_myDeck.push_back(new Card(5, m_gamePtr));
 }
 
-int Deck::getCard(int ID)
+int Deck::getCard(unsigned int ID) const
 {
-	if (ID<0 || ID>m_myDeck.size())
+	if (ID>m_myDeck.size())
 		return -1;
 	return m_myDeck[ID]->getCardId();
 }
 
-const char* Deck::getCardName(int ID)
+const char* Deck::getCardName(unsigned int ID) const
 {
-	if (ID<0 || ID>m_myDeck.size() - 1)
+	if (ID>m_myDeck.size() - 1)
 		return "Card Doesn't Exist\0";
 	return m_myDeck[ID]->getName();
 }
 
-int Deck::getCardAmount()
+int Deck::getCardAmount() const
 {
 	return m_myDeck.size();
 }
@@ -75,7 +77,7 @@ void Deck::generateMainDeck()
 	for (int i = 0;i < 52; i++)
 	{
 		//c++ 11 function to call constructor on what is emplaced back, avoids copies.
-		tempDeck.push_back(new Card(i));
+		tempDeck.push_back(new Card(i, m_gamePtr));
 	}
 
 	clearMyDeck();

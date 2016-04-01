@@ -2,8 +2,10 @@
 
 Dealer::Dealer()
 {
+
 }
 
 Dealer::~Dealer()
 {
+
 }

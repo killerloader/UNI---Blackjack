@@ -1,16 +1,18 @@
 #include "Person.h"
 #include "Deck.h"
+#include "Game.h"
 #include <iostream>
 
-Person::Person(Game& GmRef) : GRef(GmRef)
+Person::Person()
 {
-	m_myDeck = new Deck();
+	//m_myDeck = new Deck();
+	m_gamePtr = nullptr;
 }
 
 Person::~Person()
 {
-	if(m_myDeck!=nullptr)
-		delete m_myDeck;
+	//if(m_myDeck!=nullptr)//Can't have no deck, so no point.
+	delete m_myDeck;
 }
 
 void Person::Stand()
@@ -20,5 +22,5 @@ void Person::Stand()
 
 void Person::Hit()
 {
-	m_myDeck->takeFromDeck(*GRef.getGameDeck());
+	m_myDeck->takeFromDeck(*m_gamePtr->getGameDeck());
 }

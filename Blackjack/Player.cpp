@@ -1,7 +1,7 @@
 #include "Player.h"
 #include <iostream>
 
-Player::Player()
+Player::Player(Game& GmRef) : Person(GmRef)
 {
 
 }

@@ -36,6 +36,34 @@ void Resources::renderCard(const int& CardID)
 	tempStream << "Card:" << CardID;
 
 	loadTexture(tempRenderTexture.getTexture(), tempStream.str().c_str());
+	//int CardType = CardID / 13;//Suit of card (0 = Clubs, 1 = Spades, 2 = Hearts, 3 = Diamonds)
+
+	sf::RenderTexture tempRenderTexture;
+	tempRenderTexture.create(64, 90);//64 x 90 is the size of the cards.
+	sf::Sprite tempSpr(*findTexture("cardBackground"));
+
+	tempRenderTexture.clear();
+	tempRenderTexture.draw(tempSpr);
+	tempRenderTexture.display();
+
+	std::stringstream tempStream;
+	tempStream << "Card:" << CardID;
+
+	loadTexture(tempRenderTexture.getTexture(), tempStream.str().c_str());
+	//int CardType = CardID / 13;//Suit of card (0 = Clubs, 1 = Spades, 2 = Hearts, 3 = Diamonds)
+
+	sf::RenderTexture tempRenderTexture;
+	tempRenderTexture.create(64, 90);//64 x 90 is the size of the cards.
+	sf::Sprite tempSpr(*findTexture("cardBackground"));
+
+	tempRenderTexture.clear();
+	tempRenderTexture.draw(tempSpr);
+	tempRenderTexture.display();
+
+	std::stringstream tempStream;
+	tempStream << "Card:" << CardID;
+
+	loadTexture(tempRenderTexture.getTexture(), tempStream.str().c_str());
 }
 
 void Resources::loadTexture(const char* FileName, const char* TextureName)

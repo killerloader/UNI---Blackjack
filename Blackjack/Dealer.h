@@ -4,7 +4,7 @@
 class Dealer : public Person
 {
 public:
-	Dealer();
+	Dealer(Game& GmRef);
 	~Dealer();
 };
 

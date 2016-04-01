@@ -7,14 +7,14 @@ class Deck;
 class Person
 {
 public:
-	Person();
+	Person(Game& GmRef);
 	~Person();
 
 	void Stand();
 	void Hit();
 
 protected:
+	Game &GRef;
 	Deck* m_myDeck;
-	Game* m_gamePtr;
 };
 

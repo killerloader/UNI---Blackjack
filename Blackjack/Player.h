@@ -4,7 +4,7 @@
 class Player : public Person
 {
 public:
-	Player();
+	Player(Game& GmRef);
 	~Player();
 };
 

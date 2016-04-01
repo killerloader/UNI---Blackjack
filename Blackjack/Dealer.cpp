@@ -1,6 +1,6 @@
 #include "Dealer.h"
 
-Dealer::Dealer()
+Dealer::Dealer(Game& GmRef) : Person(GmRef)
 {
 
 }

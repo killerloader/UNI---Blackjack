@@ -16,7 +16,7 @@ public:
 
 	Deck* getGameDeck();
 
-	Resources m_gameResources;
+	//Resources m_gameResources;
 private:
 	Deck* m_gameDeck;
 

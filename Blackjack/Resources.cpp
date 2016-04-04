@@ -1,6 +1,8 @@
 #include "Resources.h"
 #include <sstream>
 
+Resources* Resources::m_thisInstance = nullptr;
+
 Resources::Resources()
 {
 	//m_doneLoading = false;
@@ -8,9 +10,28 @@ Resources::Resources()
 	loadTexture("Data/CardOutput/CardBackground.png", "cardBackground");//String-literals don't go out of scope.
 }
 
-Resources::~Resources()
+Resources::Resources(Resources& copyFrom)
+{
+	//Not actually used, only here to define private copy constructor so nothing can copy it.
+	//Makes it non-copyable.
+}
+
+Resources& Resources::operator=(Resources& ORes_)
+{
+	//Not actually used, only here to define private copy asignment opererator overload so nothing can copy it.
+	//Makes it non-copyable.
+}
+
+/*Resources::~Resources()
 {
 
+}*/
+
+Resources& Resources::instance()
+{
+	if (m_thisInstance == nullptr)
+		m_thisInstance = new Resources();
+	return *m_thisInstance;
 }
 
 /*void Resources::loadComplete()
@@ -36,34 +57,6 @@ void Resources::renderCard(const int& CardID)
 	tempStream << "Card:" << CardID;
 
 	loadTexture(tempRenderTexture.getTexture(), tempStream.str().c_str());
-	//int CardType = CardID / 13;//Suit of card (0 = Clubs, 1 = Spades, 2 = Hearts, 3 = Diamonds)
-
-	sf::RenderTexture tempRenderTexture;
-	tempRenderTexture.create(64, 90);//64 x 90 is the size of the cards.
-	sf::Sprite tempSpr(*findTexture("cardBackground"));
-
-	tempRenderTexture.clear();
-	tempRenderTexture.draw(tempSpr);
-	tempRenderTexture.display();
-
-	std::stringstream tempStream;
-	tempStream << "Card:" << CardID;
-
-	loadTexture(tempRenderTexture.getTexture(), tempStream.str().c_str());
-	//int CardType = CardID / 13;//Suit of card (0 = Clubs, 1 = Spades, 2 = Hearts, 3 = Diamonds)
-
-	sf::RenderTexture tempRenderTexture;
-	tempRenderTexture.create(64, 90);//64 x 90 is the size of the cards.
-	sf::Sprite tempSpr(*findTexture("cardBackground"));
-
-	tempRenderTexture.clear();
-	tempRenderTexture.draw(tempSpr);
-	tempRenderTexture.display();
-
-	std::stringstream tempStream;
-	tempStream << "Card:" << CardID;
-
-	loadTexture(tempRenderTexture.getTexture(), tempStream.str().c_str());
 }
 
 void Resources::loadTexture(const char* FileName, const char* TextureName)
@@ -74,6 +67,7 @@ void Resources::loadTexture(const char* FileName, const char* TextureName)
 	returned point to nothing.
 	One solution to this is to disable the loading of textures in the constructor, so that
 	none can be loaded after another class has gotten access to a pointer to a texture in the vector.
+	Or just hold a vector of pointers.
 	*/
 	/*if (m_doneLoading)
 	{

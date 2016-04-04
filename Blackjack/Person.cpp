@@ -3,10 +3,9 @@
 #include "Game.h"
 #include <iostream>
 
-Person::Person()
+Person::Person(Game& GmRef) : GRef(GmRef)
 {
 	//m_myDeck = new Deck();
-	m_gamePtr = nullptr;
 }
 
 Person::~Person()
@@ -22,5 +21,5 @@ void Person::Stand()
 
 void Person::Hit()
 {
-	m_myDeck->takeFromDeck(*m_gamePtr->getGameDeck());
+	m_myDeck->takeFromDeck(*GRef.getGameDeck());
 }

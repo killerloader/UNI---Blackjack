@@ -80,7 +80,7 @@ void Card::generateName(int cardID)
 	std::stringstream tempstream;
 	tempstream << "Card:" << cardID;
 	//tempstream
-	mySprite.setTexture(*m_gamePtr->m_gameResources.findTexture(tempstream.str().c_str()));
+	mySprite.setTexture(*Resources::instance().findTexture(tempstream.str().c_str()));
 }
 
 int Card::getCardId()

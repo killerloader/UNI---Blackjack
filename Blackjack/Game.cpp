@@ -20,7 +20,7 @@
 Game::Game()
 {
 	for (int i = 0; i < 52; i++)
-		m_gameResources.renderCard(i);
+		Resources::instance().renderCard(i);
 
 	//Create class pointers
 	m_gameDeck = new Deck(this);
@@ -42,7 +42,7 @@ void Game::Run()
 	m_window.create(sf::VideoMode(640, 480), "Blackjack");
 
 	//Rtest.loadComplete();
-	sf::Sprite test(*m_gameResources.findTexture("Cards"));
+	sf::Sprite test(*Resources::instance().findTexture("Cards"));
 	//Game loop
 	while (m_window.isOpen())
 	{

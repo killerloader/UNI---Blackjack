@@ -11,7 +11,7 @@ int main()
 {
 	//Check for memory leaks when in debug mode.
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
-	
+
 	//Randomize srand so that the deck is always different.
 	srand((unsigned int)time(0));
 

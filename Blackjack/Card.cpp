@@ -77,10 +77,17 @@ void Card::generateName(int cardID)
 	delete[] card_;
 	delete[] suit_;
 
+	//This might be a more efficient way of doing it, however itoa is more C
+	//It would be premature optimization to implement this.
+	/*char texName[8];
+	strcpy_s(texName,8,"Card:");
+	char itoaBuffer[3];
+	_itoa_s(cardID, itoaBuffer, 3, 10);
+	strcat_s(texName, 8, itoaBuffer);*/
+
 	std::stringstream tempstream;
 	tempstream << "Card:" << cardID;
-	//tempstream
-	mySprite.setTexture(*Resources::instance().findTexture(tempstream.str().c_str()));
+	m_mySprite.setTexture(*Resources::instance().findTexture(tempstream.str().c_str()));
 }
 
 int Card::getCardId()

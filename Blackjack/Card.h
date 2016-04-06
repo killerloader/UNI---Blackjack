@@ -34,6 +34,6 @@ private:
 	int m_cardSuit;
 	char *m_myName;
 	Game *m_gamePtr;
-	sf::Sprite mySprite;
+	sf::Sprite m_mySprite;
 };
 

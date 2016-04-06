@@ -1,6 +1,7 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include "Resources.h"
+#include <vector>
 
 class Deck;
 
@@ -19,7 +20,7 @@ public:
 	//Resources m_gameResources;
 private:
 	Deck* m_gameDeck;
-
+	
 	sf::RenderWindow m_window;
 };
 

@@ -20,6 +20,25 @@
 //Game class constructor with initializer list for Deck class object which needs to call its constructor.
 Game::Game()
 {
+	//Setup the symbol positions for the cards when they get rendered.
+	setupSymbolPositions();
+
+	//Create class pointers
+	m_gameDeck = new Deck(this);
+	//Generate the main deck, creates all 52 cards in order then shuffles them.
+	m_gameDeck->generateMainDeck();
+	//testDeck->takeFromDeck(*m_gameDeck);
+}
+
+//Game class destructor
+Game::~Game()
+{
+	//Destroy pointers
+	delete m_gameDeck;
+}
+
+void Game::setupSymbolPositions()
+{
 	//Setup symbol positions for cards.
 	int midX = 34;
 	int midY = 45;
@@ -85,35 +104,18 @@ Game::Game()
 	//10
 	Resources::instance().addToCardFormation(9, 23, 16);
 	Resources::instance().addToCardFormation(9, 45, 16);
-											 
+
 	Resources::instance().addToCardFormation(9, 23, 35);
 	Resources::instance().addToCardFormation(9, 45, 35);
-											 
+
 	Resources::instance().addToCardFormation(9, midX, 25);
 	Resources::instance().addToCardFormation(9, midX, 65);
-											 
+
 	Resources::instance().addToCardFormation(9, 23, 55);
 	Resources::instance().addToCardFormation(9, 45, 55);
-											 
+
 	Resources::instance().addToCardFormation(9, 23, 74);
 	Resources::instance().addToCardFormation(9, 45, 74);
-
-
-	//Render cards
-	for (int i = 0; i < 52; i++)
-		Resources::instance().renderCard(i);
-
-	//Create class pointers
-	m_gameDeck = new Deck(this);
-	m_gameDeck->generateMainDeck();
-	//testDeck->takeFromDeck(*m_gameDeck);
-}
-
-//Game class destructor
-Game::~Game()
-{
-	//Destroy pointers
-	delete m_gameDeck;
 }
 
 //Game run function, this will hold the game loop.
@@ -121,6 +123,8 @@ void Game::Run()
 {
 	//Creates a window that will be used for displaying sprites.
 	m_window.create(sf::VideoMode(640, 480), "Blackjack");
+	m_window.setFramerateLimit(60);
+	m_window.setVerticalSyncEnabled(true);
 
 	sf::Sprite test(*Resources::instance().findTexture("Card:33"));
 	//Game loop

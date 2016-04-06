@@ -5,8 +5,8 @@ Resources* Resources::m_thisInstance = nullptr;
 
 Resources::Resources()
 {
-	//m_doneLoading = false;
-	loadTexture("Data/Cards.jpg", "Cards");//String-literals don't go out of scope.
+	//String literals don't go out of scope.
+	loadTexture("Data/CardOutput/InnerCardOutline.png", "InnerOutline");//Outline for Jack, Queen and King image.
 	loadTexture("Data/CardOutput/CardBackground.png", "CardBackground");
 	loadTexture("Data/CardOutput/HeartBig.png", "HeartBig");
 	loadTexture("Data/CardOutput/HeartSmall.png", "HeartSmall");
@@ -46,13 +46,6 @@ void Resources::renderCard(const int& CardID)
 	sf::Sprite tempSpr(*findTexture("CardBackground"));
 	sf::Sprite cardSuitBig_, cardSuitSmall_;
 
-	//Setup sprite offsets for small suit image.
-	int setSuitSmallOffset[4][2]{ { 0,0 },{ 0,0 },{ 0,0 },{ 0,0 } };//Offset for the sprites for each set, based on diamond location.
-	setSuitSmallOffset[0][0] = 0; setSuitSmallOffset[0][1] = 0;
-	setSuitSmallOffset[1][0] = 0; setSuitSmallOffset[1][1] = 0;
-	setSuitSmallOffset[2][0] = -1; setSuitSmallOffset[2][1] = 1;//Hearts
-	//DiamondBig
-
 	int suit_ = CardID / 13;//Will truncate towards 0.
 	int cardNum = CardID - suit_ * 13;
 	char* cardSymbol;
@@ -78,6 +71,8 @@ void Resources::renderCard(const int& CardID)
 
 	switch (suit_)
 	{
+		//case 0://Clubs
+		//case 1://Spades
 	case 2://Hearts
 		cardSuitBig_.setTexture(*findTexture("HeartBig"));
 		cardSuitSmall_.setTexture(*findTexture("HeartSmall"));
@@ -99,16 +94,16 @@ void Resources::renderCard(const int& CardID)
 	tempRenderTexture.draw(tempSpr);
 
 	//We have less space with Q J and K, so give separate coords for the items on both cases.
-	int BorderItemPos[2]{ 6, 61 };
+	int BorderItemPos[2]{ 7, 60 };
 	if (cardNum < 10)//Not J K or Q
 	{
 		BorderItemPos[0] = 8;
 		BorderItemPos[1] = 59;
 
 		//Draw large symbols.
-		for (int i = 0; i < m_cardFormations[cardNum].coordsX.size(); i++)
+		for (unsigned int i = 0; i < m_cardFormations[cardNum].coordsX.size(); i++)
 		{
-			cardSuitBig_.setPosition(m_cardFormations[cardNum].coordsX[i], m_cardFormations[cardNum].coordsY[i]);
+			cardSuitBig_.setPosition((float)m_cardFormations[cardNum].coordsX[i], (float)m_cardFormations[cardNum].coordsY[i]);
 			if (m_cardFormations[cardNum].coordsY[i]>45)//Past half way
 				cardSuitBig_.setScale(1, -1);//Flip
 			else
@@ -116,24 +111,32 @@ void Resources::renderCard(const int& CardID)
 			tempRenderTexture.draw(cardSuitBig_);
 		}
 	}
+	else//Is a Jack/King/Queen
+	{
+		sf::Sprite innerOutlineSpr(*findTexture("InnerOutline"));
+		innerOutlineSpr.setPosition(12, 11);
+		tempRenderTexture.draw(innerOutlineSpr);
+	}
 
 	//Draw top left suit.
-	cardSuitSmall_.setPosition(BorderItemPos[0], 23);
+	cardSuitSmall_.setPosition((float)BorderItemPos[0], 23.f);
 	tempRenderTexture.draw(cardSuitSmall_);
 	//Draw bottom right suit.
-	cardSuitSmall_.setPosition(BorderItemPos[1], 65);
+	cardSuitSmall_.setPosition((float)BorderItemPos[1], 65.f);
 	cardSuitSmall_.setScale(-1,-1);
 	tempRenderTexture.draw(cardSuitSmall_);
-	//
 
 	sf::Text cardNumberString(cardSymbol, m_cardFont, 13);
+	cardNumberString.setColor(sf::Color::Black);
+	if(suit_ == 2 || suit_ == 3)//red suit
+		cardNumberString.setColor(sf::Color::Red);
 	cardNumberString.setStyle(sf::Text::Bold);
 	//cardNumberString.set
 	cardNumberString.setOrigin((cardNumberString.getLocalBounds().width+1) / 2, (cardNumberString.getLocalBounds().height+1) / 2);
-	cardNumberString.setPosition(BorderItemPos[0], 8);
-	cardNumberString.setColor(sf::Color::Black);
+	cardNumberString.setPosition((float)BorderItemPos[0], 8.f);
+	
 	tempRenderTexture.draw(cardNumberString);
-	cardNumberString.setPosition(BorderItemPos[1], 81);
+	cardNumberString.setPosition((float)BorderItemPos[1], 81.f);
 	cardNumberString.setScale(-1,-1);
 	tempRenderTexture.draw(cardNumberString);
 	
@@ -155,6 +158,7 @@ void Resources::addToCardFormation(int CNum, int x_, int y_)
 	m_cardFormations[CNum].addCoords(x_, y_);
 }
 
+//Gets a texture from a file, and adds it to the resources.
 void Resources::loadTexture(const char* FileName, const char* TextureName)
 {
 	/*
@@ -172,6 +176,7 @@ void Resources::loadTexture(const char* FileName, const char* TextureName)
 	strcpy_s(TexNames[TexNames.size() - 1], strlen(TextureName) + 1, TextureName);
 }
 
+//Copies a texture and adds it to the resources.
 void Resources::loadTexture(const sf::Texture& copyTexture, const char* TextureName)
 {
 	TexResources.push_back(new sf::Texture(copyTexture));

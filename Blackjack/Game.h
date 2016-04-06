@@ -15,6 +15,8 @@ public:
 	void Run();
 	void Draw();
 
+	void setupSymbolPositions();
+
 	Deck* getGameDeck();
 
 	//Resources m_gameResources;

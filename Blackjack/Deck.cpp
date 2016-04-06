@@ -71,17 +71,25 @@ void Deck::generateMainDeck()
 	//----------------------------------------------------------------------------------------------------------------------------------------------------------
 	//Figure it out!
 	//----------------------------------------------------------------------------------------------------------------------------------------------------------
+
+	//Clear this deck just in case.
+	clearMyDeck();
+
 	std::vector<Card*> tempDeck;//Don't need to delete, memory will be used.
 	
 	//Create the cards in order in the array.
+	std::cout << "Creating main deck and generating cards..." << std::endl;
 	for (int i = 0;i < 52; i++)
 	{
-		//c++ 11 function to call constructor on what is emplaced back, avoids copies.
+		//Generate card image
+		Resources::instance().renderCard(i);
+		//Create card (Constructor will assign card image to its sprite, so must be done in this order)
 		tempDeck.push_back(new Card(i, m_gamePtr));
+		
 	}
+	std::cout << "Done!" << std::endl;
 
-	clearMyDeck();
-
+	//Inefficient way of sorting array.
 	while (tempDeck.size() > 0)
 	{
 		//Get a random card from the deck.

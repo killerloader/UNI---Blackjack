@@ -8,12 +8,8 @@ Card::Card(int cardId, Game *gamePtr_)
 {
 	m_gamePtr = gamePtr_;
 	m_myName = nullptr;
-	//m_myName[0] = 5;
 	m_cardId = cardId;
-	//myName = new char[strlen(NewName) + 1];//+1 to include (\0) null terminator
 	generateName(cardId);
-	//strcpy(myName, NewName);
-	std::cout << m_myName << std::endl;
 }
 
 Card::Card(Card &Ocard)

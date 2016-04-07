@@ -6,12 +6,19 @@ Resources* Resources::m_thisInstance = nullptr;
 Resources::Resources()
 {
 	//String literals don't go out of scope.
-	loadTexture("Data/CardOutput/InnerCardOutline.png", "InnerOutline");//Outline for Jack, Queen and King image.
-	loadTexture("Data/CardOutput/CardBackground.png", "CardBackground");
-	loadTexture("Data/CardOutput/HeartBig.png", "HeartBig");
-	loadTexture("Data/CardOutput/HeartSmall.png", "HeartSmall");
-	loadTexture("Data/CardOutput/DiamondBig.png", "DiamondBig");
-	loadTexture("Data/CardOutput/DiamondSmall.png", "DiamondSmall");
+	loadTexture("Data/InnerCardOutline.png", "InnerOutline");//Outline for Jack, Queen and King image.
+	loadTexture("Data/CardBackground.png", "CardBackground");
+	loadTexture("Data/HeartBig.png", "HeartBig");
+	loadTexture("Data/HeartSmall.png", "HeartSmall");
+	loadTexture("Data/DiamondBig.png", "DiamondBig");
+	loadTexture("Data/DiamondSmall.png", "DiamondSmall");
+	loadTexture("Data/SpadeBig.png", "SpadeBig");
+	loadTexture("Data/SpadeSmall.png", "SpadeSmall");
+	loadTexture("Data/ClubBig.png", "ClubBig");
+	loadTexture("Data/ClubSmall.png", "ClubSmall");
+	loadTexture("Data/Jack.png", "JackImage");
+	loadTexture("Data/Queen.png", "QueenImage");
+	loadTexture("Data/King.png", "KingImage");
 
 	m_cardFont.loadFromFile("Data/micross.ttf");
 }
@@ -64,15 +71,21 @@ void Resources::renderCard(const int& CardID)
 	case 8:cardSymbol = new char[2]{ '9' }; break;
 	case 9:cardSymbol = new char[3]{ "10" }; break;
 	case 10:cardSymbol = new char[2]{ 'J' }; break;
-	case 11:cardSymbol = new char[2]{ 'K' }; break;
-	case 12:cardSymbol = new char[2]{ 'Q' }; break;
+	case 11:cardSymbol = new char[2]{ 'Q' }; break;
+	case 12:cardSymbol = new char[2]{ 'K' }; break;
 	default:cardSymbol = new char[2]{ 'E' }; break;
 	}
 
 	switch (suit_)
 	{
-		//case 0://Clubs
-		//case 1://Spades
+	case 0://Clubs
+		cardSuitBig_.setTexture(*findTexture("ClubBig"));
+		cardSuitSmall_.setTexture(*findTexture("ClubSmall"));
+		break;
+	case 1://Spades
+		cardSuitBig_.setTexture(*findTexture("SpadeBig"));
+		cardSuitSmall_.setTexture(*findTexture("SpadeSmall"));
+		break;
 	case 2://Hearts
 		cardSuitBig_.setTexture(*findTexture("HeartBig"));
 		cardSuitSmall_.setTexture(*findTexture("HeartSmall"));
@@ -82,19 +95,17 @@ void Resources::renderCard(const int& CardID)
 		cardSuitSmall_.setTexture(*findTexture("DiamondSmall"));
 		break;
 	default://ERROR/ None
-		cardSuitBig_.setTexture(*findTexture("DiamondBig"));
-		cardSuitSmall_.setTexture(*findTexture("DiamondSmall"));
 		break;
 	}
-	cardSuitBig_.setOrigin((cardSuitBig_.getLocalBounds().width + 1) / 2, (cardSuitBig_.getLocalBounds().height + 1) / 2);//Will truncate down
-	cardSuitSmall_.setOrigin((cardSuitSmall_.getLocalBounds().width+1) / 2, (cardSuitSmall_.getLocalBounds().height + 1) / 2);//Will truncate down
+	cardSuitBig_.setOrigin((cardSuitBig_.getLocalBounds().width - 1) / 2, (cardSuitBig_.getLocalBounds().height - 1) / 2);//Will truncate down
+	cardSuitSmall_.setOrigin((cardSuitSmall_.getLocalBounds().width-1) / 2, (cardSuitSmall_.getLocalBounds().height - 1) / 2);//Will truncate down
 
 	tempRenderTexture.clear();
 	//Draw the base of the card.
 	tempRenderTexture.draw(tempSpr);
 
 	//We have less space with Q J and K, so give separate coords for the items on both cases.
-	int BorderItemPos[2]{ 7, 60 };
+	int BorderItemPos[2]{ 6, 61 };
 	if (cardNum < 10)//Not J K or Q
 	{
 		BorderItemPos[0] = 8;
@@ -116,6 +127,47 @@ void Resources::renderCard(const int& CardID)
 		sf::Sprite innerOutlineSpr(*findTexture("InnerOutline"));
 		innerOutlineSpr.setPosition(12, 11);
 		tempRenderTexture.draw(innerOutlineSpr);
+
+		//JackImage
+		sf::Sprite innerCardImage;
+		switch (cardNum)
+		{
+		case 10://Jack
+			innerCardImage.setTexture(*findTexture("JackImage")); break;
+		case 11://Queen
+			innerCardImage.setTexture(*findTexture("QueenImage")); break;
+		case 12://King
+			innerCardImage.setTexture(*findTexture("KingImage")); break;
+		}
+		innerCardImage.setPosition(13, 12);
+		tempRenderTexture.draw(innerCardImage);
+
+		if (cardNum == 12)//Kings are flipped
+		{
+			//Draw top inner small suit.
+			cardSuitSmall_.setPosition(19.f, 20.f);
+			tempRenderTexture.draw(cardSuitSmall_);
+
+			//Draw bottom inner small suit.
+			cardSuitSmall_.setPosition(47.f, 70.f);
+			cardSuitSmall_.setScale(1, -1);
+			tempRenderTexture.draw(cardSuitSmall_);
+		}
+		else
+		{
+			//Draw top inner small suit.
+			cardSuitSmall_.setPosition(47.f, 20.f);
+			tempRenderTexture.draw(cardSuitSmall_);
+
+			//Draw bottom inner small suit.
+			cardSuitSmall_.setPosition(19.f, 70.f);
+			cardSuitSmall_.setScale(1, -1);
+			tempRenderTexture.draw(cardSuitSmall_);
+		}
+
+		//Reset scale, as it gets used later.
+		cardSuitSmall_.setScale(1, 1);
+
 	}
 
 	//Draw top left suit.
@@ -132,11 +184,11 @@ void Resources::renderCard(const int& CardID)
 		cardNumberString.setColor(sf::Color::Red);
 	cardNumberString.setStyle(sf::Text::Bold);
 	//cardNumberString.set
-	cardNumberString.setOrigin((cardNumberString.getLocalBounds().width+1) / 2, (cardNumberString.getLocalBounds().height+1) / 2);
+	cardNumberString.setOrigin((cardNumberString.getLocalBounds().width-1) / 2, (cardNumberString.getLocalBounds().height-1) / 2);
 	cardNumberString.setPosition((float)BorderItemPos[0], 8.f);
 	
 	tempRenderTexture.draw(cardNumberString);
-	cardNumberString.setPosition((float)BorderItemPos[1], 81.f);
+	cardNumberString.setPosition((float)BorderItemPos[1], 80.f);
 	cardNumberString.setScale(-1,-1);
 	tempRenderTexture.draw(cardNumberString);
 	
@@ -145,7 +197,6 @@ void Resources::renderCard(const int& CardID)
 
 	std::stringstream tempStream;
 	tempStream << "Card:" << CardID;
-
 	loadTexture(tempRenderTexture.getTexture(), tempStream.str().c_str());
 }
 

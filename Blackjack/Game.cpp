@@ -40,7 +40,7 @@ Game::~Game()
 void Game::setupSymbolPositions()
 {
 	//Setup symbol positions for cards.
-	int midX = 34;
+	int midX = 33;
 	int midY = 45;
 	//A
 	Resources::instance().addToCardFormation(0, midX, midY);
@@ -52,70 +52,70 @@ void Game::setupSymbolPositions()
 	Resources::instance().addToCardFormation(2, midX, midY);
 	Resources::instance().addToCardFormation(2, midX, 74);
 	//4
-	Resources::instance().addToCardFormation(3, 23, 16);
-	Resources::instance().addToCardFormation(3, 23, 74);
-	Resources::instance().addToCardFormation(3, 45, 16);
-	Resources::instance().addToCardFormation(3, 45, 74);
+	Resources::instance().addToCardFormation(3, midX-11, 16);
+	Resources::instance().addToCardFormation(3, midX-11, 74);
+	Resources::instance().addToCardFormation(3, midX+11, 16);
+	Resources::instance().addToCardFormation(3, midX+11, 74);
 	//5
-	Resources::instance().addToCardFormation(4, 23, 16);
-	Resources::instance().addToCardFormation(4, 23, 74);
+	Resources::instance().addToCardFormation(4, midX - 11, 16);
+	Resources::instance().addToCardFormation(4, midX - 11, 74);
 	Resources::instance().addToCardFormation(4, midX, midY);
-	Resources::instance().addToCardFormation(4, 45, 16);
-	Resources::instance().addToCardFormation(4, 45, 74);
+	Resources::instance().addToCardFormation(4, midX + 11, 16);
+	Resources::instance().addToCardFormation(4, midX + 11, 74);
 	//6
-	Resources::instance().addToCardFormation(5, 23, 16);
-	Resources::instance().addToCardFormation(5, 45, 16);
-	Resources::instance().addToCardFormation(5, 23, midY);
-	Resources::instance().addToCardFormation(5, 45, midY);
-	Resources::instance().addToCardFormation(5, 23, 74);
+	Resources::instance().addToCardFormation(5, midX - 11, 16);
+	Resources::instance().addToCardFormation(5, midX + 11, 16);
+	Resources::instance().addToCardFormation(5, midX - 11, midY);
+	Resources::instance().addToCardFormation(5, midX + 11, midY);
+	Resources::instance().addToCardFormation(5, midX - 11, 74);
 	Resources::instance().addToCardFormation(5, 45, 74);
 	//7
-	Resources::instance().addToCardFormation(6, 23, 16);
-	Resources::instance().addToCardFormation(6, 45, 16);
+	Resources::instance().addToCardFormation(6, midX - 11, 16);
+	Resources::instance().addToCardFormation(6, midX + 11, 16);
 	Resources::instance().addToCardFormation(6, midX, 31);//14 above midy
-	Resources::instance().addToCardFormation(6, 23, midY);
-	Resources::instance().addToCardFormation(6, 45, midY);
-	Resources::instance().addToCardFormation(6, 23, 74);
-	Resources::instance().addToCardFormation(6, 45, 74);
+	Resources::instance().addToCardFormation(6, midX - 11, midY);
+	Resources::instance().addToCardFormation(6, midX + 11, midY);
+	Resources::instance().addToCardFormation(6, midX - 11, 74);
+	Resources::instance().addToCardFormation(6, midX + 11, 74);
 	//8
-	Resources::instance().addToCardFormation(7, 23, 16);
-	Resources::instance().addToCardFormation(7, 45, 16);
+	Resources::instance().addToCardFormation(7, midX - 11, 16);
+	Resources::instance().addToCardFormation(7, midX + 11, 16);
 	Resources::instance().addToCardFormation(7, midX, 31);//14 above midy
-	Resources::instance().addToCardFormation(7, 23, midY);
-	Resources::instance().addToCardFormation(7, 45, midY);
+	Resources::instance().addToCardFormation(7, midX - 11, midY);
+	Resources::instance().addToCardFormation(7, midX + 11, midY);
 	Resources::instance().addToCardFormation(7, midX, 59);//14 below midy
-	Resources::instance().addToCardFormation(7, 23, 74);
-	Resources::instance().addToCardFormation(7, 45, 74);
+	Resources::instance().addToCardFormation(7, midX - 11, 74);
+	Resources::instance().addToCardFormation(7, midX + 11, 74);
 	//9
-	Resources::instance().addToCardFormation(8, 23, 16);
-	Resources::instance().addToCardFormation(8, 45, 16);
+	Resources::instance().addToCardFormation(8, midX - 11, 16);
+	Resources::instance().addToCardFormation(8, midX + 11, 16);
 
-	Resources::instance().addToCardFormation(8, 23, 35);
-	Resources::instance().addToCardFormation(8, 45, 35);
+	Resources::instance().addToCardFormation(8, midX - 11, 35);
+	Resources::instance().addToCardFormation(8, midX + 11, 35);
 
 	Resources::instance().addToCardFormation(8, midX, midY);
 
-	Resources::instance().addToCardFormation(8, 23, 55);
-	Resources::instance().addToCardFormation(8, 45, 55);
+	Resources::instance().addToCardFormation(8, midX - 11, 55);
+	Resources::instance().addToCardFormation(8, midX + 11, 55);
 
-	Resources::instance().addToCardFormation(8, 23, 74);
-	Resources::instance().addToCardFormation(8, 45, 74);
+	Resources::instance().addToCardFormation(8, midX - 11, 74);
+	Resources::instance().addToCardFormation(8, midX + 11, 74);
 
 	//10
-	Resources::instance().addToCardFormation(9, 23, 16);
-	Resources::instance().addToCardFormation(9, 45, 16);
+	Resources::instance().addToCardFormation(9, midX - 11, 16);
+	Resources::instance().addToCardFormation(9, midX + 11, 16);
 
-	Resources::instance().addToCardFormation(9, 23, 35);
-	Resources::instance().addToCardFormation(9, 45, 35);
+	Resources::instance().addToCardFormation(9, midX - 11, 35);
+	Resources::instance().addToCardFormation(9, midX + 11, 35);
 
 	Resources::instance().addToCardFormation(9, midX, 25);
 	Resources::instance().addToCardFormation(9, midX, 65);
 
-	Resources::instance().addToCardFormation(9, 23, 55);
-	Resources::instance().addToCardFormation(9, 45, 55);
+	Resources::instance().addToCardFormation(9, midX - 11, 55);
+	Resources::instance().addToCardFormation(9, midX + 11, 55);
 
-	Resources::instance().addToCardFormation(9, 23, 74);
-	Resources::instance().addToCardFormation(9, 45, 74);
+	Resources::instance().addToCardFormation(9, midX - 11, 74);
+	Resources::instance().addToCardFormation(9, midX + 11, 74);
 }
 
 //Game run function, this will hold the game loop.

@@ -1,0 +1,16 @@
+All images here were drawn by me, aside from the Jack, King and Queen images,
+they were cropped out of a free deck that i found online:
+
+Copyright/ License for the images i cropped:
+------------------------------------------------------------------------
+Authors: Original deck, (C) Oxymoron.
+.....The modified deck (this download), (C) Katzmiff 2002
+
+Regular 52 playing cards plus two Jokers, upright & reversed Aces, one cardback. (59 images in all). This is the regular deck used in CardMage.
+Size: 71 x 96 pixels.
+
+Licence for this deck is of course GPL and may be modified under the terms of the licence.
+------------------------------------------------------------------------
+
+from: http://freeware.esoterica.free.fr/html/freecards.html
+download: http://freeware.esoterica.free.fr/html/adls/cmagedeck.zip

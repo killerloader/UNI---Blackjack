@@ -1,7 +1,6 @@
-//include iostream to give access to input and output functions apart of the std namespace.
 #include <iostream>
-#include "Game.h"
 
+#include "Game.h"
 
 //Use the std namespace so that it does not have to be typed before every std function.
 using namespace std;
@@ -21,5 +20,9 @@ int main()
 	//Run the function in the Game object which has the game loop in it.
 	GameObj.Run();
 
+	//Make sure the resource manager gets destroyed.
+	Resources::instance().destroy();
+
+	//Exit the program with a return status of 0 (success)
 	return 0;
 }

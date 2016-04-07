@@ -10,7 +10,9 @@ Deck::Deck(Game *gamePtr_)
 
 Deck::~Deck()
 {
-
+	//Delete cards in deck.
+	for (unsigned int i = 0; i < m_myDeck.size(); i++)
+		delete m_myDeck[i];
 }
 
 //TakeFromDeck() will take cards from another deck (removing them from the other deck and adding them to this deck)

@@ -1,11 +1,16 @@
 #include "Resources.h"
+
 #include <sstream>
 
+//Set singleton instance to nullptr.
 Resources* Resources::m_thisInstance = nullptr;
 
+//Constructor, loads some textures which will be required later on
+//Although this should actualy be done in the Game class if this were to use abstraction.
 Resources::Resources()
 {
 	//String literals don't go out of scope.
+	//Basically load card components for use with creating cards.
 	loadTexture("Data/InnerCardOutline.png", "InnerOutline");//Outline for Jack, Queen and King image.
 	loadTexture("Data/CardBackground.png", "CardBackground");
 	loadTexture("Data/HeartBig.png", "HeartBig");
@@ -20,21 +25,40 @@ Resources::Resources()
 	loadTexture("Data/Queen.png", "QueenImage");
 	loadTexture("Data/King.png", "KingImage");
 
+	//load main font (a windows default font)
 	m_cardFont.loadFromFile("Data/micross.ttf");
+
+	//Create card renderer rendertexture at start so it doesn't have to be created many times.
+	m_CardRenderer.create(67, 91);
 }
 
-Resources::Resources(Resources& copyFrom)
+//Function to destroy the singleton and call its destructor.
+void Resources::destroy()
 {
-	//Not actually used, only here to define private copy constructor so nothing can copy it.
-	//Makes it non-copyable.
+	
+	delete this;				//Delete self and call destructor.
+	m_thisInstance = nullptr;	//Set static singleton instance to nullptr.
 }
 
-Resources& Resources::operator=(Resources& ORes_)
+//Clean up game resources.
+Resources::~Resources()
 {
-	//Not actually used, only here to define private copy asignment opererator overload so nothing can copy it.
-	//Makes it non-copyable.
+	//Delete each texture.
+	for (unsigned int i = 0; i < m_texResources.size(); i++)
+		delete m_texResources[i];
+
+	//Delete each texture name.
+	for (unsigned int i = 0; i < m_texNames.size(); i++)
+		delete[] m_texNames[i];
 }
 
+//Removes public implicit copy constructor.
+Resources::Resources(Resources& copyFrom) {};
+
+//Removes public implicit copy assignment operator.
+void Resources::operator=(Resources& ORes_) {};
+
+//Singleton access.
 Resources& Resources::instance()
 {
 	if (m_thisInstance == nullptr)
@@ -42,22 +66,23 @@ Resources& Resources::instance()
 	return *m_thisInstance;
 }
 
-//Uses a RenderTexture / Surface to create cards and then save them as a normal texture.
-//Function should probably be in game, and not in Resources.
+//Uses a RenderTexture / Surface to generate card sprites and then saves them as a normal resource.
+//Function is more suited to be in Game class if this class were to use abstraction.
 void Resources::renderCard(const int& CardID)
 {
-	//int CardType = CardID / 13;//Suit of card (0 = Clubs, 1 = Spades, 2 = Hearts, 3 = Diamonds)
-
-	sf::RenderTexture tempRenderTexture;
-	tempRenderTexture.create(67, 91);//64 x 90 is the size of the cards.
+	//Clear the rendertexture so it can be used with a new card.
+	m_CardRenderer.clear();
 	sf::Sprite tempSpr(*findTexture("CardBackground"));
-	sf::Sprite cardSuitBig_, cardSuitSmall_;
+	sf::Sprite cardSuitBig, cardSuitSmall;
 
+	//Setup card data.
 	int suit_ = CardID / 13;//Will truncate towards 0.
 	int cardNum = CardID - suit_ * 13;
-	char* cardSymbol;
+	char* cardSymbol;//No point in setting to nullptr.
 
+	//Get Number/ Letter of card in char array format to draw to card.
 	//Alternatively just create an array of symbols and point the cardNum to that.
+	//This probably gets optimized by the compiler anyways.
 	switch (cardNum)
 	{
 	case 0:cardSymbol = new char[2]{ 'A' }; break;
@@ -76,59 +101,71 @@ void Resources::renderCard(const int& CardID)
 	default:cardSymbol = new char[2]{ 'E' }; break;
 	}
 
+	//Set suit symbols according to suit of card.
 	switch (suit_)
 	{
 	case 0://Clubs
-		cardSuitBig_.setTexture(*findTexture("ClubBig"));
-		cardSuitSmall_.setTexture(*findTexture("ClubSmall"));
+		cardSuitBig.setTexture(*findTexture("ClubBig"));
+		cardSuitSmall.setTexture(*findTexture("ClubSmall"));
 		break;
 	case 1://Spades
-		cardSuitBig_.setTexture(*findTexture("SpadeBig"));
-		cardSuitSmall_.setTexture(*findTexture("SpadeSmall"));
+		cardSuitBig.setTexture(*findTexture("SpadeBig"));
+		cardSuitSmall.setTexture(*findTexture("SpadeSmall"));
 		break;
 	case 2://Hearts
-		cardSuitBig_.setTexture(*findTexture("HeartBig"));
-		cardSuitSmall_.setTexture(*findTexture("HeartSmall"));
+		cardSuitBig.setTexture(*findTexture("HeartBig"));
+		cardSuitSmall.setTexture(*findTexture("HeartSmall"));
 		break;
 	case 3://diamonds
-		cardSuitBig_.setTexture(*findTexture("DiamondBig"));
-		cardSuitSmall_.setTexture(*findTexture("DiamondSmall"));
+		cardSuitBig.setTexture(*findTexture("DiamondBig"));
+		cardSuitSmall.setTexture(*findTexture("DiamondSmall"));
 		break;
 	default://ERROR/ None
 		break;
 	}
-	cardSuitBig_.setOrigin((cardSuitBig_.getLocalBounds().width - 1) / 2, (cardSuitBig_.getLocalBounds().height - 1) / 2);
-	cardSuitSmall_.setOrigin((cardSuitSmall_.getLocalBounds().width - 1) / 2, (cardSuitSmall_.getLocalBounds().height - 1) / 2);
 
-	tempRenderTexture.clear();
-	//Draw the base of the card.
-	tempRenderTexture.draw(tempSpr);
+	//Set origin of suit symbols to their center so they can be more easily placed and scaled.
+	cardSuitBig.setOrigin((cardSuitBig.getLocalBounds().width - 1) / 2, (cardSuitBig.getLocalBounds().height - 1) / 2);
+	cardSuitSmall.setOrigin((cardSuitSmall.getLocalBounds().width - 1) / 2, (cardSuitSmall.getLocalBounds().height - 1) / 2);
 
-	//We have less space with Q J and K, so give separate coords for the items on both cases.
-	int BorderItemPos[2]{ 6, 61 };
-	if (cardNum < 10)//Not J K or Q
+	//Clear the render texture/ buffer (as you would clear the screen)
+	m_CardRenderer.clear();
+
+	//Draw the base of the card, just a blank canvas.
+	m_CardRenderer.draw(tempSpr);
+
+	//We have less space with Q J and K due to their image, so give separate coordinates for them.
+	int borderItemPos[2]{ 6, 61 };//Initiate with 
+
+	if (cardNum < 10)//Not a Jack, Queen or King
 	{
-		BorderItemPos[0] = 8;
-		BorderItemPos[1] = 59;
+		borderItemPos[0] = 8;
+		borderItemPos[1] = 59;
 
 		//Draw large symbols.
-		for (unsigned int i = 0; i < m_cardFormations[cardNum].coordsX.size(); i++)
+		for (unsigned int i = 0; i < m_cardFormations[cardNum].coords.size(); i++)
 		{
-			cardSuitBig_.setPosition((float)m_cardFormations[cardNum].coordsX[i], (float)m_cardFormations[cardNum].coordsY[i]);
-			if (m_cardFormations[cardNum].coordsY[i]>45)//Past half way
-				cardSuitBig_.setScale(1, -1);//Flip
+			cardSuitBig.setPosition((float)m_cardFormations[cardNum].coords[i].x, (float)m_cardFormations[cardNum].coords[i].y);
+
+			//If symbol position is past half way, flip it.
+			if (m_cardFormations[cardNum].coords[i].y>45)
+				cardSuitBig.setScale(1, -1);//Flip
 			else
-				cardSuitBig_.setScale(1, 1);//Default
-			tempRenderTexture.draw(cardSuitBig_);
+				cardSuitBig.setScale(1, 1);//Default
+
+			m_CardRenderer.draw(cardSuitBig);
 		}
 	}
-	else//Is a Jack/King/Queen
+	else//Is a Jack, Queen or King
 	{
+		//Draw the inner outline which contains the card image.
 		sf::Sprite innerOutlineSpr(*findTexture("InnerOutline"));
-		innerOutlineSpr.setPosition(12, 11);
-		tempRenderTexture.draw(innerOutlineSpr);
 
-		//JackImage
+		//Set its position using int literals.
+		innerOutlineSpr.setPosition(12, 11);
+		m_CardRenderer.draw(innerOutlineSpr);
+
+		//Select the appropriate image for the appropriate card.
 		sf::Sprite innerCardImage;
 		switch (cardNum)
 		{
@@ -139,72 +176,77 @@ void Resources::renderCard(const int& CardID)
 		case 12://King
 			innerCardImage.setTexture(*findTexture("KingImage")); break;
 		}
+		//Draw the image inside the inner outline.
 		innerCardImage.setPosition(13, 12);
-		tempRenderTexture.draw(innerCardImage);
+		m_CardRenderer.draw(innerCardImage);
 
-		if (cardNum == 12)//Kings are flipped
+		//Kings are flipped, so we draw the inner suit symbols on opposite ends.
+		if (cardNum == 12)
 		{
 			//Draw top inner small suit.
-			cardSuitSmall_.setPosition(19.f, 20.f);
-			tempRenderTexture.draw(cardSuitSmall_);
+			cardSuitSmall.setPosition(19.f, 20.f);
+			m_CardRenderer.draw(cardSuitSmall);
 
 			//Draw bottom inner small suit.
-			cardSuitSmall_.setPosition(47.f, 70.f);
-			cardSuitSmall_.setScale(1, -1);
-			tempRenderTexture.draw(cardSuitSmall_);
+			cardSuitSmall.setPosition(47.f, 70.f);
+			cardSuitSmall.setScale(1, -1);
+			m_CardRenderer.draw(cardSuitSmall);
 		}
-		else
+		else//Not a king
 		{
 			//Draw top inner small suit.
-			cardSuitSmall_.setPosition(47.f, 20.f);
-			tempRenderTexture.draw(cardSuitSmall_);
+			cardSuitSmall.setPosition(47.f, 20.f);
+			m_CardRenderer.draw(cardSuitSmall);
 
 			//Draw bottom inner small suit.
-			cardSuitSmall_.setPosition(19.f, 70.f);
-			cardSuitSmall_.setScale(1, -1);
-			tempRenderTexture.draw(cardSuitSmall_);
+			cardSuitSmall.setPosition(19.f, 70.f);
+			cardSuitSmall.setScale(1, -1);
+			m_CardRenderer.draw(cardSuitSmall);
 		}
 
 		//Reset scale, as it gets used later.
-		cardSuitSmall_.setScale(1, 1);
-
+		cardSuitSmall.setScale(1, 1);
 	}
 
-	//Draw top left suit.
-	cardSuitSmall_.setPosition((float)BorderItemPos[0], 23.f);
-	tempRenderTexture.draw(cardSuitSmall_);
-	//Draw bottom right suit.
-	cardSuitSmall_.setPosition((float)BorderItemPos[1], 65.f);
-	cardSuitSmall_.setScale(-1,-1);
-	tempRenderTexture.draw(cardSuitSmall_);
+	//Draw top left small suit.
+	cardSuitSmall.setPosition((float)borderItemPos[0], 23.f);
+	m_CardRenderer.draw(cardSuitSmall);
 
+	//Draw bottom right small suit.
+	cardSuitSmall.setPosition((float)borderItemPos[1], 68.f);
+	cardSuitSmall.setScale(-1,-1);
+	m_CardRenderer.draw(cardSuitSmall);
+
+	//Setup and draw the number/letter associated with the card.
 	sf::Text cardNumberString(cardSymbol, m_cardFont, 13);
 	cardNumberString.setColor(sf::Color::Black);
 	if(suit_ == 2 || suit_ == 3)//red suit
 		cardNumberString.setColor(sf::Color::Red);
 	cardNumberString.setStyle(sf::Text::Bold);
-	//cardNumberString.set
 	cardNumberString.setOrigin((cardNumberString.getLocalBounds().width-1) / 2, (cardNumberString.getLocalBounds().height-1) / 2);
-	cardNumberString.setPosition((float)BorderItemPos[0], 8.f);
+	cardNumberString.setPosition((float)borderItemPos[0], 8.f);
 	
-	tempRenderTexture.draw(cardNumberString);
-	cardNumberString.setPosition((float)BorderItemPos[1], 80.f);
+	m_CardRenderer.draw(cardNumberString);
+	cardNumberString.setPosition((float)borderItemPos[1], 83.f);
 	cardNumberString.setScale(-1,-1);
-	tempRenderTexture.draw(cardNumberString);
-	
+	m_CardRenderer.draw(cardNumberString);
 
-	tempRenderTexture.display();
+	//Display the temportary render texture, as it is ready to be used.
+	m_CardRenderer.display();
 
+	//Save this new sprite as a texture resource. Use stringstream to create its assigned name.
 	std::stringstream tempStream;
 	tempStream << "Card:" << CardID;
-	loadTexture(tempRenderTexture.getTexture(), tempStream.str().c_str());
+	loadTexture(m_CardRenderer.getTexture(), tempStream.str().c_str());
+
+	//Delete temporary cardSymbol variable.
+	delete[] cardSymbol;
 }
 
+//Adds a card to the symbol formations (cards A to 10)
 void Resources::addToCardFormation(int CNum, int x_, int y_)
 {
-	if (CNum < 0)
-		return;
-	if (CNum > 9)
+	if (CNum < 0 || CNum > 9)//not within A to 10
 		return;
 	m_cardFormations[CNum].addCoords(x_, y_);
 }
@@ -212,34 +254,26 @@ void Resources::addToCardFormation(int CNum, int x_, int y_)
 //Gets a texture from a file, and adds it to the resources.
 void Resources::loadTexture(const char* FileName, const char* TextureName)
 {
-	/*
-	If a texture is loaded after an object has called the findTexture() function
-	its memory address can change, which makes the address that the function previously
-	returned point to nothing.
-	One solution to this is to disable the loading of textures in the constructor, so that
-	none can be loaded after another class has gotten access to a pointer to a texture in the vector.
-	Or just hold a vector of pointers.
-	*/
-
-	TexResources.push_back(new sf::Texture);
-	TexResources[TexResources.size() - 1]->loadFromFile(FileName);
-	TexNames.push_back(new char[strlen(TextureName) + 1]);
-	strcpy_s(TexNames[TexNames.size() - 1], strlen(TextureName) + 1, TextureName);
+	m_texResources.push_back(new sf::Texture);
+	m_texResources[m_texResources.size() - 1]->loadFromFile(FileName);
+	m_texNames.push_back(new char[strlen(TextureName) + 1]);
+	strcpy_s(m_texNames[m_texNames.size() - 1], strlen(TextureName) + 1, TextureName);
 }
 
 //Copies a texture and adds it to the resources.
 void Resources::loadTexture(const sf::Texture& copyTexture, const char* TextureName)
 {
-	TexResources.push_back(new sf::Texture(copyTexture));
-	TexNames.push_back(new char[strlen(TextureName) + 1]);
-	strcpy_s(TexNames[TexNames.size() - 1], strlen(TextureName) + 1, TextureName);
+	m_texResources.push_back(new sf::Texture(copyTexture));
+	m_texNames.push_back(new char[strlen(TextureName) + 1]);
+	strcpy_s(m_texNames[m_texNames.size() - 1], strlen(TextureName) + 1, TextureName);
 }
 
+//Searches for a texture using a name.
 sf::Texture* Resources::findTexture(const char* SearchName)
 {
-	for (unsigned int i = 0; i < TexNames.size(); i++)
-		if (strcmp(SearchName, TexNames[i]) == 0)
-			return TexResources[i];
+	for (unsigned int i = 0; i < m_texNames.size(); i++)
+		if (strcmp(SearchName, m_texNames[i]) == 0)
+			return m_texResources[i];
 	std::cout << "Unable to find texture: " << SearchName << std::endl;
 	return nullptr;
 }

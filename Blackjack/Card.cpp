@@ -1,5 +1,6 @@
 #include "Card.h"
 #include "Game.h"
+
 #include <iostream>
 #include <sstream>
 #include <math.h>
@@ -99,6 +100,16 @@ int Card::getCardValue()
 const char* Card::getName()
 {
 	return m_myName;
+}
+
+void Card::operator=(Card &Ocard)//Also copy constructor
+{
+	if (m_myName != nullptr)
+		delete[] m_myName;//Delete old card name if it is already created (pretty much certain)
+
+	m_cardId = Ocard.getCardId();
+	m_cardSuit = m_cardId / 13;
+	m_cardNum = m_cardId - m_cardSuit * 13;
 }
 
 Card::~Card()

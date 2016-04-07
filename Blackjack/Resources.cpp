@@ -97,8 +97,8 @@ void Resources::renderCard(const int& CardID)
 	default://ERROR/ None
 		break;
 	}
-	cardSuitBig_.setOrigin((cardSuitBig_.getLocalBounds().width - 1) / 2, (cardSuitBig_.getLocalBounds().height - 1) / 2);//Will truncate down
-	cardSuitSmall_.setOrigin((cardSuitSmall_.getLocalBounds().width-1) / 2, (cardSuitSmall_.getLocalBounds().height - 1) / 2);//Will truncate down
+	cardSuitBig_.setOrigin((cardSuitBig_.getLocalBounds().width - 1) / 2, (cardSuitBig_.getLocalBounds().height - 1) / 2);
+	cardSuitSmall_.setOrigin((cardSuitSmall_.getLocalBounds().width - 1) / 2, (cardSuitSmall_.getLocalBounds().height - 1) / 2);
 
 	tempRenderTexture.clear();
 	//Draw the base of the card.

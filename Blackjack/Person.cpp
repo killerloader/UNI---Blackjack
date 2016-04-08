@@ -6,7 +6,7 @@
 
 Person::Person(Game& GmRef) : m_gameRef(GmRef)
 {
-	m_myDeck = new Deck(&GmRef);
+	m_myDeck = new Deck(GmRef);
 }
 
 Person::~Person()

@@ -5,18 +5,16 @@
 #include <sstream>
 #include <math.h>
 
-Card::Card(int cardId, Game *gamePtr_)
+Card::Card(int cardId, Game &gameRef) : m_gameRef(gameRef)
 {
-	m_gamePtr = gamePtr_;
 	m_myName = nullptr;
 	m_cardId = cardId;
 	generateCard(cardId);
 }
 
-Card::Card(Card &Ocard)
+Card::Card(Card &Ocard, Game &gameRef) : m_gameRef(gameRef)
 {
 	*this = Ocard;//Use = copy operator to copy Ocard into this card.
-	//TODO: Create proper copy constructor.
 }
 
 sf::Sprite& Card::getSprite()
@@ -119,7 +117,6 @@ void Card::operator=(Card &Ocard)//Also copy constructor
 	m_cardId = Ocard.m_cardId;
 	m_cardNum = Ocard.m_cardNum;
 	m_cardSuit = Ocard.m_cardSuit;
-	m_gamePtr = Ocard.m_gamePtr;
 	m_mySprite = Ocard.m_mySprite;
 }
 

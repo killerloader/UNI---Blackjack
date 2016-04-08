@@ -1,9 +1,6 @@
 #pragma once
 
-/*
-	ToDO:
-		- Overload [] (subscript) operator to  get cards in deck.
-*/
+#include <SFML/Graphics.hpp>
 
 #include <vector>
 
@@ -15,20 +12,25 @@ class Game;
 class Deck
 {
 public:
-	Deck(Game *gamePtr_);								//Constructor (takes pointer to game class)
+	Deck(Game &gamePtr_);								//Constructor (takes pointer to game class)
 	~Deck();											//Destructor
 	void shuffle();										//Shuffles the cards in the deck.
 	void takeFromDeck(Deck &otherDeck);					//Takes a card from another deck, and adds it to this one.
 	void generateMainDeck();							//Generates the main deck (should only be used once)
 	void clearMyDeck();									//Empties the deck and deletes everything inside.
-	void drawDeck();									//draws the cards in the deck to the game surface.
+	void drawDeck(int, int, int);						//draws the cards in the deck to the game surface.
 	void addCard(int CID);								//Could be reference to a pointer, but not much point.
-	int calculateTotal() const;							//Finds the total worth of the cards in the deck (considers Aces as 1 or 11)
+	int getWidth(int);									//Returns the width of the drawn deck.
+	int calculateTotal();							//Finds the total worth of the cards in the deck (considers Aces as 1 or 11)
 	Card *getCard(unsigned int ID) const;				//Gets a pointer to a card at a specific place.
 	Card* operator[] (unsigned int ID) const;			//Subscript operator overload
-	Game *m_gamePtr;									//Pointer to game class.
+	Game &m_gameRef;									//Reference to game class.
 
 private:
 	std::vector<Card*> m_myDeck;
+	sf::RectangleShape m_valueRect;		//The rectangle that contains the total text.
+	sf::Text m_totalText;				//A cached version of the total, but in sf::Text format (drawable)
+	int m_cachedTotal;					//A cached version of the total, so it does not need to be calcualted every time.
+	bool m_totalChanged;				//A check to see if total needs to be recalculated.
 };
 

@@ -161,6 +161,7 @@
     <ClCompile Include="Dealer.cpp" />
     <ClCompile Include="Deck.cpp" />
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="GameButton.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Person.cpp" />
     <ClCompile Include="Player.cpp" />
@@ -171,6 +172,7 @@
     <ClInclude Include="Dealer.h" />
     <ClInclude Include="Deck.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="GameButton.h" />
     <ClInclude Include="Person.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Resources.h" />

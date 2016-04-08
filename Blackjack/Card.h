@@ -12,8 +12,8 @@ Card.h/ Card.cpp
 class Card
 {
 public:
-	Card(int cardId, Game *gamePtr_);//Main constructor
-	Card::Card(Card &Ocard);		//Copy constructor.
+	Card(int cardId, Game &gameRef);//Main constructor
+	Card(Card &Ocard, Game &gameRef);//Copy constructor.
 	void operator=(Card &Ocard);	//copy assignment operator.
 	~Card();						//Destructor.
 	int getCardNum();				//Gets the value of the current card.
@@ -27,7 +27,7 @@ private:
 	int m_cardNum;					//2 - 10, ace, jack, queen or king. (0-12)
 	int m_cardSuit;					//Card suit (0 to 3)
 	char *m_myName;					//Stored name of card.
-	Game *m_gamePtr;				//Pointer to game class.
+	Game &m_gameRef;				//Pointer to game class.
 	sf::Sprite m_mySprite;			//Sprite of card (not a copy of its texture though)
 };
 

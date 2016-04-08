@@ -35,7 +35,6 @@ Resources::Resources()
 //Function to destroy the singleton and call its destructor.
 void Resources::destroy()
 {
-	
 	delete this;				//Delete self and call destructor.
 	m_thisInstance = nullptr;	//Set static singleton instance to nullptr.
 }
@@ -66,6 +65,11 @@ Resources& Resources::instance()
 	return *m_thisInstance;
 }
 
+sf::Font& Resources::getFont()
+{
+	return m_cardFont;
+}
+
 //Uses a RenderTexture / Surface to generate card sprites and then saves them as a normal resource.
 //Function is more suited to be in Game class if this class were to use abstraction.
 void Resources::renderCard(const int& CardID)
@@ -79,7 +83,7 @@ void Resources::renderCard(const int& CardID)
 		return;
 
 	//Clear the rendertexture so it can be used with a new card.
-	m_CardRenderer.clear();
+	m_CardRenderer.clear(sf::Color(255,255,255,0));
 	sf::Sprite tempSpr(*findTexture("CardBackground"));
 	sf::Sprite cardSuitBig, cardSuitSmall;
 
@@ -140,7 +144,8 @@ void Resources::renderCard(const int& CardID)
 	m_CardRenderer.clear();
 
 	//Draw the base of the card, just a blank canvas.
-	m_CardRenderer.draw(tempSpr);
+	//Blend mode "None" so that the transparency of the corners are kept.
+	m_CardRenderer.draw(tempSpr, sf::BlendNone);
 
 	//We have less space with Q J and K due to their image, so give separate coordinates for them.
 	int borderItemPos[2]{ 6, 61 };//Initiate with 
@@ -256,6 +261,16 @@ void Resources::addToCardFormation(int CNum, int x_, int y_)
 		return;
 
 	m_cardFormations[CNum].addCoords(x_, y_);
+}
+
+//Copies one formation to another (as some formations are similar)
+void Resources::copyCardFormation(int sourceNum, int destNum)
+{
+	if (sourceNum < 0 || sourceNum > 9 || destNum < 0 || destNum > 9)//not within A to 10
+		return;
+
+	for (unsigned int i = 0; i < m_cardFormations[sourceNum].coords.size(); i++)
+		m_cardFormations[destNum].addCoords(m_cardFormations[sourceNum].coords[i].x, m_cardFormations[sourceNum].coords[i].y);
 }
 
 //Gets a texture from a file, and adds it to the resources.

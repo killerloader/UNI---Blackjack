@@ -9,6 +9,7 @@
 class Deck;
 class Player;
 class Dealer;
+class GameButton;
 
 /*
 	Game.h/ Game.cpp
@@ -25,14 +26,15 @@ public:
 	void Draw();					//Game draw/ render event.
 	void Update();					//Game step event.
 	void setupSymbolPositions();	//Sets up the symbol positioning of cards A to 10
-	void drawItem(const sf::Drawable& drawable);
 	Deck* getMainDeck();			//Getter for the game deck.
-	
+	sf::RenderWindow& getWindow();  //
 
 private:
 	Deck* m_gameDeck;				//Pointer to the game/ main deck.
 	sf::RenderWindow m_window;		//Game window.
 	Player* playerObj;
 	Dealer* dealerObj;
+	GameButton* hitButton;
+	GameButton* standButton;
 };
 

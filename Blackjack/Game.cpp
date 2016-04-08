@@ -17,6 +17,7 @@
 #include "Player.h"
 #include "Dealer.h"
 #include "Resources.h"
+#include "GameButton.h"
 
 //Game class constructor with initializer list for Deck class object which needs to call its constructor.
 Game::Game()
@@ -25,13 +26,16 @@ Game::Game()
 	setupSymbolPositions();
 
 	//Create class pointers
-	m_gameDeck = new Deck(this);
+	m_gameDeck = new Deck(*this);
 
 	//Generate the main deck, creates all 52 cards in order then shuffles them.
 	m_gameDeck->generateMainDeck();
 
 	playerObj = new Player(*this);
 	dealerObj = new Dealer(*this);
+
+	hitButton = new GameButton(*this, 260,430,64,25, "Hit", 20, sf::Color::Red, sf::Color::Green, sf::Color::Blue, true);
+	standButton = new GameButton(*this, 380, 430, 64, 25, "Stand", 20, sf::Color::Red, sf::Color::Green, sf::Color::Blue, true);
 }
 
 //Game class destructor
@@ -41,6 +45,8 @@ Game::~Game()
 	delete m_gameDeck;
 	delete playerObj;
 	delete dealerObj;
+	delete hitButton;
+	delete standButton;
 }
 
 void Game::setupSymbolPositions()
@@ -59,74 +65,40 @@ void Game::setupSymbolPositions()
 	Resources::instance().addToCardFormation(1, midX, topY);
 	Resources::instance().addToCardFormation(1, midX, 74);
 	//3
-	Resources::instance().addToCardFormation(2, midX, topY);
-	Resources::instance().addToCardFormation(2, midX, midY);
-	Resources::instance().addToCardFormation(2, midX, bottomY);
+	Resources::instance().copyCardFormation(0, 2);
+	Resources::instance().copyCardFormation(1, 2);
 	//4
 	Resources::instance().addToCardFormation(3, leftX, topY);
 	Resources::instance().addToCardFormation(3, leftX, bottomY);
 	Resources::instance().addToCardFormation(3, midX+11, topY);
 	Resources::instance().addToCardFormation(3, midX+11, bottomY);
 	//5
-	Resources::instance().addToCardFormation(4, leftX, topY);
-	Resources::instance().addToCardFormation(4, leftX, bottomY);
-	Resources::instance().addToCardFormation(4, midX, midY);
-	Resources::instance().addToCardFormation(4, rightX, topY);
-	Resources::instance().addToCardFormation(4, rightX, bottomY);
+	Resources::instance().copyCardFormation(0, 4);
+	Resources::instance().copyCardFormation(3, 4);
 	//6
-	Resources::instance().addToCardFormation(5, leftX, topY);
-	Resources::instance().addToCardFormation(5, rightX, topY);
+	Resources::instance().copyCardFormation(3, 5);
 	Resources::instance().addToCardFormation(5, leftX, midY);
 	Resources::instance().addToCardFormation(5, rightX, midY);
-	Resources::instance().addToCardFormation(5, leftX, bottomY);
-	Resources::instance().addToCardFormation(5, 45, bottomY);
 	//7
-	Resources::instance().addToCardFormation(6, leftX, topY);
-	Resources::instance().addToCardFormation(6, rightX, topY);
+	Resources::instance().copyCardFormation(5, 6);
 	Resources::instance().addToCardFormation(6, midX, 31);//14 above midy
-	Resources::instance().addToCardFormation(6, leftX, midY);
-	Resources::instance().addToCardFormation(6, rightX, midY);
-	Resources::instance().addToCardFormation(6, leftX, bottomY);
-	Resources::instance().addToCardFormation(6, rightX, 74);
 	//8
-	Resources::instance().addToCardFormation(7, leftX, topY);
-	Resources::instance().addToCardFormation(7, rightX, topY);
-	Resources::instance().addToCardFormation(7, midX, 31);//14 above midy
-	Resources::instance().addToCardFormation(7, leftX, midY);
-	Resources::instance().addToCardFormation(7, rightX, midY);
+	Resources::instance().copyCardFormation(6, 7);
 	Resources::instance().addToCardFormation(7, midX, 59);//14 below midy
-	Resources::instance().addToCardFormation(7, leftX, 74);
-	Resources::instance().addToCardFormation(7, rightX, 74);
 	//9
-	Resources::instance().addToCardFormation(8, leftX, topY);
-	Resources::instance().addToCardFormation(8, rightX, topY);
-
+	Resources::instance().copyCardFormation(4, 8);
 	Resources::instance().addToCardFormation(8, leftX, 35);
 	Resources::instance().addToCardFormation(8, rightX, 35);
-
-	Resources::instance().addToCardFormation(8, midX, midY);
-
 	Resources::instance().addToCardFormation(8, leftX, 55);
 	Resources::instance().addToCardFormation(8, rightX, 55);
-
-	Resources::instance().addToCardFormation(8, leftX, 74);
-	Resources::instance().addToCardFormation(8, rightX, 74);
-
 	//10
-	Resources::instance().addToCardFormation(9, leftX, topY);
-	Resources::instance().addToCardFormation(9, rightX, topY);
-
+	Resources::instance().copyCardFormation(3, 9);
 	Resources::instance().addToCardFormation(9, leftX, 35);
 	Resources::instance().addToCardFormation(9, rightX, 35);
-
 	Resources::instance().addToCardFormation(9, midX, 25);
 	Resources::instance().addToCardFormation(9, midX, 65);
-
 	Resources::instance().addToCardFormation(9, leftX, 55);
 	Resources::instance().addToCardFormation(9, rightX, 55);
-
-	Resources::instance().addToCardFormation(9, leftX, 74);
-	Resources::instance().addToCardFormation(9, rightX, 74);
 }
 
 //Game run function, this will hold the game loop.
@@ -152,7 +124,7 @@ void Game::Run()
 		Update();
 
 		//Clear screen to black (by default)
-		m_window.clear();
+		m_window.clear(sf::Color(31,163,66,255));
 
 		//Actually draw stuff.
 		Draw();
@@ -165,25 +137,40 @@ void Game::Run()
 //A separate function for drawing, just to split up the main function.
 void Game::Draw()
 {
-	playerObj->getDeck()->drawDeck();
+	//Render player deck.
+	playerObj->getDeck()->drawDeck(320 - playerObj->getDeck()->getWidth(25) / 2, 300, 25);
+	dealerObj->getDeck()->drawDeck(320 - dealerObj->getDeck()->getWidth(25) / 2, 100, 25);
+
+	hitButton->draw();
+	standButton->draw();
 }
 
 //A seperate function for the game step/ update.
 void Game::Update()
 {
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::H))
+	hitButton->step();
+	standButton->step();
+
+	//Hit Button
+	if (hitButton->isRelease())
 	{
-		std::cout << "Press any key to hit..." << std::endl;
-		system("Pause>nul");
-		system("cls");
 		playerObj->Hit();
 		std::cout << "Hit, deck now worth: " << playerObj->getDeck()->calculateTotal() << std::endl;
 	}
+
+	//Stand Button
+	if (standButton->isRelease())
+	{
+		playerObj->Stand();
+		std::cout << "Standing..." << std::endl;
+	}
 }
 
-void Game::drawItem(const sf::Drawable& drawable)
+//Pretty much same parameters as the window draw function.
+//Allows other classes to draw things simply.
+sf::RenderWindow& Game::getWindow()
 {
-	m_window.draw(drawable);
+	return m_window;
 }
 
 Deck* Game::getMainDeck()

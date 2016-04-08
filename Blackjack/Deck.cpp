@@ -126,6 +126,8 @@ Card* Deck::operator[] (unsigned int ID) const
 //Draws each card in the deck to the screen.
 void Deck::drawDeck(int x, int y, int sep)
 {
+	calculateTotal();
+
 	//Draw each card in the deck.
 	for (unsigned int i = 0; i < m_myDeck.size(); i++)
 	{
@@ -159,7 +161,7 @@ int Deck::getWidth(int separation)
 void Deck::generateMainDeck()
 {
 	//Clear this deck just in case.
-	clearMyDeck();
+	clearDeck();
 	
 	//Create the cards in order in the array.
 	std::cout << "Creating main deck and generating cards..." << std::endl;
@@ -197,10 +199,12 @@ void Deck::shuffle()
 	}
 }
 
-void Deck::clearMyDeck()
+void Deck::clearDeck()
 {
 	for (unsigned int i = 0; i < m_myDeck.size(); i++)
 		delete m_myDeck[i];
 
 	m_myDeck.clear();
+
+	m_totalChanged = true;
 }

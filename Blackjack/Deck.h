@@ -17,7 +17,7 @@ public:
 	void shuffle();										//Shuffles the cards in the deck.
 	void takeFromDeck(Deck &otherDeck);					//Takes a card from another deck, and adds it to this one.
 	void generateMainDeck();							//Generates the main deck (should only be used once)
-	void clearMyDeck();									//Empties the deck and deletes everything inside.
+	void clearDeck();									//Empties the deck and deletes everything inside.
 	void drawDeck(int, int, int);						//draws the cards in the deck to the game surface.
 	void addCard(int CID);								//Could be reference to a pointer, but not much point.
 	int getWidth(int);									//Returns the width of the drawn deck.

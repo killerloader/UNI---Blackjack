@@ -141,8 +141,11 @@ void Game::Draw()
 	playerObj->getDeck()->drawDeck(320 - playerObj->getDeck()->getWidth(25) / 2, 300, 25);
 	dealerObj->getDeck()->drawDeck(320 - dealerObj->getDeck()->getWidth(25) / 2, 100, 25);
 
-	hitButton->draw();
-	standButton->draw();
+	if (!playerObj->isStanding())
+	{
+		hitButton->draw();
+		standButton->draw();
+	}
 }
 
 //A seperate function for the game step/ update.
@@ -151,18 +154,58 @@ void Game::Update()
 	hitButton->step();
 	standButton->step();
 
-	//Hit Button
-	if (hitButton->isRelease())
+	if (!playerObj->isStanding())
 	{
-		playerObj->Hit();
-		std::cout << "Hit, deck now worth: " << playerObj->getDeck()->calculateTotal() << std::endl;
-	}
+		if (playerObj->isBust())
+		{
+			std::cout << "You have gone bust, therefore you lose." << std::endl;
+			playerObj->reset();
+			dealerObj->reset();
+			m_gameDeck->generateMainDeck();
+			return;
+		}
 
-	//Stand Button
-	if (standButton->isRelease())
+		//Hit Button
+		if (hitButton->isRelease())
+		{
+			playerObj->hit();
+			std::cout << "Hit, deck now worth: " << playerObj->getDeck()->calculateTotal() << std::endl;
+		}
+
+		//Stand Button
+		if (standButton->isRelease())
+		{
+			playerObj->stand();
+			std::cout << "Standing..." << std::endl;
+		}
+	}
+	else//Dealers turn.
 	{
-		playerObj->Stand();
-		std::cout << "Standing..." << std::endl;
+		if (dealerObj->isBust())
+		{
+			std::cout << "The dealer has gone bust, and therefore you win!" << std::endl;
+			system("Pause");
+			playerObj->reset();
+			dealerObj->reset();
+			m_gameDeck->generateMainDeck();
+			return;
+		}
+
+		if (dealerObj->getDeck()->calculateTotal() < playerObj->getDeck()->calculateTotal())
+		{
+			dealerObj->hit();
+		}
+		else
+		{
+			if(dealerObj->getDeck()->calculateTotal() == playerObj->getDeck()->calculateTotal())//tie / push
+				std::cout << "Nobody wins, it is a tie. (a push)" << std::endl;
+			else
+				std::cout << "The dealer gets a better set of cards than you, so he wins." << std::endl;
+			system("Pause");
+			playerObj->reset();
+			dealerObj->reset();
+			m_gameDeck->generateMainDeck();
+		}
 	}
 }
 

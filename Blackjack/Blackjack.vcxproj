@@ -72,7 +72,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
     <OutDir>$(SolutionDir)\Game\</OutDir>
-    <IntDir>$(SolutionDir)\Game\</IntDir>
+    <IntDir>$(SolutionDir)\BuildStuff\</IntDir>
     <TargetName>$(ProjectName)_DEBUG</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -81,7 +81,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
     <OutDir>$(SolutionDir)\Game\</OutDir>
-    <IntDir>$(SolutionDir)\Game\</IntDir>
+    <IntDir>$(SolutionDir)\BuildStuff\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>

@@ -24,12 +24,12 @@ class Resources
 public:
 	void loadTexture(const char*, const char*);									//Function for loading texture from a file to resources.
 	void loadTexture(const sf::Texture& copyTexture, const char* TextureName);	//Overloaded function for copying a texture to resources.
-	sf::Texture* findTexture(const char*);										//Function for searching through textures using their names.
+	sf::Texture* findTexture(const char*, bool = true);								//Function for searching through textures using their names.
 	void renderCard(const int& CardID);											//Function that renders a card using its card ID to a surface then copies it to the texture resources.
 	void addToCardFormation(int CNum, int x_, int y_);							//Function to add a card formation.
 	static Resources& instance();												//Function for singleton access.
 	~Resources();																//Destructor to clean up the resources.
-	void destroy();
+	void destroy();																//
 private:
 	std::vector<sf::Texture*> m_texResources;		//Array that holds pointers to textures.
 	std::vector<char*> m_texNames;					//Array that holds the name of textures so that they can be found.

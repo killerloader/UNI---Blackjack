@@ -16,12 +16,13 @@ public:
 	Card::Card(Card &Ocard);		//Copy constructor.
 	void operator=(Card &Ocard);	//copy assignment operator.
 	~Card();						//Destructor.
-	int getCardValue();				//Gets the value of the current card.
+	int getCardNum();				//Gets the value of the current card.
 	const char* getName();			//Gets the name of the card. ("King of Diamonds", etc)
 	int getCardId();				//Gets the card Id (0 to 51)
+	sf::Sprite& getSprite();
 
 private:
-	void generateName(int cardID);	//Creates the name of the card
+	void generateCard(int cardID);	//Creates the card (sets the texture and creates the name)
 	int m_cardId;					//Card ID (0 to 51)
 	int m_cardNum;					//2 - 10, ace, jack, queen or king. (0-12)
 	int m_cardSuit;					//Card suit (0 to 3)

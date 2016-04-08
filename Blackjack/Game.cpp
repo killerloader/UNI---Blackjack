@@ -12,6 +12,7 @@
 #include <sstream>
 
 #include "Game.h"
+#include "Card.h"
 #include "Deck.h"
 #include "Player.h"
 #include "Dealer.h"
@@ -25,9 +26,12 @@ Game::Game()
 
 	//Create class pointers
 	m_gameDeck = new Deck(this);
+
 	//Generate the main deck, creates all 52 cards in order then shuffles them.
 	m_gameDeck->generateMainDeck();
-	//testDeck->takeFromDeck(*m_gameDeck);
+
+	playerObj = new Player(*this);
+	dealerObj = new Dealer(*this);
 }
 
 //Game class destructor
@@ -35,6 +39,8 @@ Game::~Game()
 {
 	//Destroy pointers
 	delete m_gameDeck;
+	delete playerObj;
+	delete dealerObj;
 }
 
 void Game::setupSymbolPositions()
@@ -47,8 +53,6 @@ void Game::setupSymbolPositions()
 	int topY = midY - 29;//29 above mid
 	int bottomY = midY + 29;//29 below mid
 	
-
-
 	//A
 	Resources::instance().addToCardFormation(0, midX, midY);
 	//2
@@ -131,9 +135,8 @@ void Game::Run()
 	//Creates a window that will be used for displaying sprites.
 	m_window.create(sf::VideoMode(640, 480), "Blackjack");
 	m_window.setFramerateLimit(60);
-	m_window.setVerticalSyncEnabled(true);
+	m_window.setVerticalSyncEnabled(false);
 
-	sf::Sprite test(*Resources::instance().findTexture("Card:33"));
 	//Game loop
 	while (m_window.isOpen())
 	{
@@ -145,22 +148,15 @@ void Game::Run()
 				m_window.close();
 		}
 
+		//Game step event
+		Update();
+
 		//Clear screen to black (by default)
 		m_window.clear();
 
 		//Actually draw stuff.
 		Draw();
-
-		if(sf::Keyboard::isKeyPressed(sf::Keyboard::C))
-		{
-			std::stringstream myStream;
-			myStream << "Card:" << rand() % 52;
-			std::cout << "Card changed to: " << myStream.str() << std::endl;
-			test.setTexture(*Resources::instance().findTexture(myStream.str().c_str()));
-		}
-
-		m_window.draw(test);
-
+		
 		//Draw screen buffer now that everything has been drawn to it.
 		m_window.display();
 	}
@@ -169,10 +165,28 @@ void Game::Run()
 //A separate function for drawing, just to split up the main function.
 void Game::Draw()
 {
-	
+	playerObj->getDeck()->drawDeck();
 }
 
-Deck* Game::getGameDeck()
+//A seperate function for the game step/ update.
+void Game::Update()
+{
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::H))
+	{
+		std::cout << "Press any key to hit..." << std::endl;
+		system("Pause>nul");
+		system("cls");
+		playerObj->Hit();
+		std::cout << "Hit, deck now worth: " << playerObj->getDeck()->calculateTotal() << std::endl;
+	}
+}
+
+void Game::drawItem(const sf::Drawable& drawable)
+{
+	m_window.draw(drawable);
+}
+
+Deck* Game::getMainDeck()
 {
 	return m_gameDeck;
 }

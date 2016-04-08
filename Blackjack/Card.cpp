@@ -10,7 +10,7 @@ Card::Card(int cardId, Game *gamePtr_)
 	m_gamePtr = gamePtr_;
 	m_myName = nullptr;
 	m_cardId = cardId;
-	generateName(cardId);
+	generateCard(cardId);
 }
 
 Card::Card(Card &Ocard)
@@ -19,7 +19,13 @@ Card::Card(Card &Ocard)
 	//TODO: Create proper copy constructor.
 }
 
-void Card::generateName(int cardID)
+sf::Sprite& Card::getSprite()
+{
+	return m_mySprite;
+}
+
+//This function generates a name for the card and sets its sprite to the corrosponding texture in the game resources.
+void Card::generateCard(int cardID)
 {
 	char* suit_;
 	char* card_;
@@ -74,14 +80,6 @@ void Card::generateName(int cardID)
 	delete[] card_;
 	delete[] suit_;
 
-	//This might be a more efficient way of doing it, however itoa is more C
-	//It would be premature optimization to implement this.
-	/*char texName[8];
-	strcpy_s(texName,8,"Card:");
-	char itoaBuffer[3];
-	_itoa_s(cardID, itoaBuffer, 3, 10);
-	strcat_s(texName, 8, itoaBuffer);*/
-
 	std::stringstream tempstream;
 	tempstream << "Card:" << cardID;
 	m_mySprite.setTexture(*Resources::instance().findTexture(tempstream.str().c_str()));
@@ -92,7 +90,7 @@ int Card::getCardId()
 	return m_cardId;
 }
 
-int Card::getCardValue()
+int Card::getCardNum()
 {
 	return m_cardNum;
 }
@@ -102,14 +100,27 @@ const char* Card::getName()
 	return m_myName;
 }
 
+//Copy constructor.
+//Copies information from one card to this one.
+//Might not be very useful when all cards are held as pointers and their pointer is all that gets transferred.
 void Card::operator=(Card &Ocard)//Also copy constructor
 {
+	//Delete current name if it has one.
 	if (m_myName != nullptr)
 		delete[] m_myName;//Delete old card name if it is already created (pretty much certain)
 
-	m_cardId = Ocard.getCardId();
-	m_cardSuit = m_cardId / 13;
-	m_cardNum = m_cardId - m_cardSuit * 13;
+	//Create a new char array for the name.
+	m_myName = new char[strlen(Ocard.getName()) + 1];
+	
+	//Copy other name into this one.
+	strcpy_s(m_myName, strlen(Ocard.getName()) + 1, Ocard.getName());
+
+	//Copy other stuff.
+	m_cardId = Ocard.m_cardId;
+	m_cardNum = Ocard.m_cardNum;
+	m_cardSuit = Ocard.m_cardSuit;
+	m_gamePtr = Ocard.m_gamePtr;
+	m_mySprite = Ocard.m_mySprite;
 }
 
 Card::~Card()

@@ -1,0 +1,1 @@
+- Is single deck blackjack (dealer and player uses the same deck)

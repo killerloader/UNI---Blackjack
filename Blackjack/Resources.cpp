@@ -70,6 +70,14 @@ Resources& Resources::instance()
 //Function is more suited to be in Game class if this class were to use abstraction.
 void Resources::renderCard(const int& CardID)
 {
+	//Get name of texture, to check if already created and to save at the end of the function if it is not.
+	std::stringstream tempStream;
+	tempStream << "Card:" << CardID;
+
+	//Check if texture already exists. (and don't show errors)
+	if (findTexture(tempStream.str().c_str(), false) != nullptr)
+		return;
+
 	//Clear the rendertexture so it can be used with a new card.
 	m_CardRenderer.clear();
 	sf::Sprite tempSpr(*findTexture("CardBackground"));
@@ -235,8 +243,6 @@ void Resources::renderCard(const int& CardID)
 	m_CardRenderer.display();
 
 	//Save this new sprite as a texture resource. Use stringstream to create its assigned name.
-	std::stringstream tempStream;
-	tempStream << "Card:" << CardID;
 	loadTexture(m_CardRenderer.getTexture(), tempStream.str().c_str());
 
 	//Delete temporary cardSymbol variable.
@@ -248,6 +254,7 @@ void Resources::addToCardFormation(int CNum, int x_, int y_)
 {
 	if (CNum < 0 || CNum > 9)//not within A to 10
 		return;
+
 	m_cardFormations[CNum].addCoords(x_, y_);
 }
 
@@ -269,11 +276,13 @@ void Resources::loadTexture(const sf::Texture& copyTexture, const char* TextureN
 }
 
 //Searches for a texture using a name.
-sf::Texture* Resources::findTexture(const char* SearchName)
+sf::Texture* Resources::findTexture(const char* SearchName, bool showError)
 {
 	for (unsigned int i = 0; i < m_texNames.size(); i++)
 		if (strcmp(SearchName, m_texNames[i]) == 0)
 			return m_texResources[i];
-	std::cout << "Unable to find texture: " << SearchName << std::endl;
+
+	if(showError)
+		std::cout << "Unable to find texture: " << SearchName << std::endl;
 	return nullptr;
 }

@@ -12,9 +12,10 @@ public:
 
 	void Stand();
 	void Hit();
+	Deck* getDeck();
 
 protected:
-	Game &GRef;
+	Game &m_gameRef;
 	Deck* m_myDeck;
 };
 

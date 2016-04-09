@@ -1,5 +1,6 @@
 #pragma once
 #include <SFML/Graphics.hpp>
+
 #include <iostream>
 
 /*
@@ -7,6 +8,8 @@
 		This class will act as a container that holds all the games resources:
 		(fonts, textures/sprites, etc)
 		It is a singleton so that anything can find a texture or add one.
+
+		All cards are also generated inside this class.
 */
 
 //Struct that holds formations of symbols for certain cards.

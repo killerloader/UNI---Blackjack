@@ -4,14 +4,18 @@
 
 #include <iostream>
 
+//Deck constructor, takes a refernce to the main game project.
 Deck::Deck(Game &gameRef) : m_gameRef(gameRef)
 {
+	//Setup cache for the total value of the deck.
 	m_cachedTotal = 0;
 	m_totalChanged = false;
 
+	//Setup rectangle which shows the value of the deck.
 	m_valueRect.setSize(sf::Vector2f(40, 20));
 	m_valueRect.setFillColor(sf::Color(0, 0, 0, 150));
 
+	//Sets up the value text in the rectangle.
 	m_totalText.setFont(Resources::instance().getFont());
 	m_totalText.setString("0");
 	m_totalText.setCharacterSize(20);
@@ -19,7 +23,7 @@ Deck::Deck(Game &gameRef) : m_gameRef(gameRef)
 
 Deck::~Deck()
 {
-	//Delete cards in deck.
+	//Delete all cards in deck.
 	for (unsigned int i = 0; i < m_myDeck.size(); i++)
 		delete m_myDeck[i];
 }
@@ -41,6 +45,7 @@ Card* Deck::takeFromDeck(Deck &otherDeck)
 	//Add last card to this deck.
 	m_myDeck.push_back(tempCardPtr);
 
+	//The total has changed, so the value cache is invalid.
 	m_totalChanged = true;
 	otherDeck.m_totalChanged = true;
 
@@ -97,6 +102,8 @@ int Deck::calculateTotal()
 	sprintf_s(totalBuffer, 4, "%d", m_cachedTotal);
 	m_totalText.setString(totalBuffer);
 
+	delete[] totalBuffer;
+
 	return m_cachedTotal;
 }
 
@@ -107,6 +114,7 @@ void Deck::addCard(int CID)
 	//Can't use emplace_back because is a vector of pointers.
 	m_myDeck.push_back(new Card(5, m_gameRef));
 
+	//The total has changed, so the value cache is invalid.
 	m_totalChanged = true;
 }
 
@@ -140,6 +148,7 @@ void Deck::drawDeck(int x, int y, int sep)
 	//Check if deck is not empty.
 	if (m_myDeck.size() != 0)
 	{
+		//Draw the rectangle and the value of the card inside it.
 		m_valueRect.setPosition((float)x - 44, (float)y);
 
 		m_totalText.setOrigin(m_totalText.getLocalBounds().left + m_totalText.getLocalBounds().width / 2, m_totalText.getLocalBounds().top + m_totalText.getLocalBounds().height / 2);
@@ -150,7 +159,7 @@ void Deck::drawDeck(int x, int y, int sep)
 	}
 }
 
-//
+//Gets the width of the deck (in drawn space) given a card separation value.
 int Deck::getWidth(int separation)
 {
 	if (m_myDeck.size() == 0)
@@ -159,6 +168,8 @@ int Deck::getWidth(int separation)
 	return cardWidth + separation*(m_myDeck.size()-1);
 }
 
+
+//Get the height of the deck (same as the height of one card, although if the deck is empty, this will be 0)
 int Deck::getHeight()
 {
 	if (m_myDeck.size() == 0)
@@ -191,6 +202,7 @@ void Deck::generateMainDeck()
 	shuffle();
 }
 
+//Shuffles the deck.
 void Deck::shuffle()
 {
 	std::vector<Card*> tempDeck(m_myDeck);
@@ -208,11 +220,13 @@ void Deck::shuffle()
 	}
 }
 
+//Returns the amount of cards in the deck.
 unsigned int Deck::getSize()
 {
 	return m_myDeck.size();
 }
 
+//Clears every card from the deck and deletes the cards.
 void Deck::clearDeck()
 {
 	for (unsigned int i = 0; i < m_myDeck.size(); i++)
@@ -220,5 +234,6 @@ void Deck::clearDeck()
 
 	m_myDeck.clear();
 
+	//Cached value of deck is now invalid.
 	m_totalChanged = true;
 }

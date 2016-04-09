@@ -13,7 +13,10 @@ class GameButton;
 
 /*
 	Game.h/ Game.cpp
-		
+		Main game class.
+		Pretty much controls everything, holds most of the other objects (although not Resources, as that is a singleton)
+		Draws objects to the screen, animates, updates objects, controls the menu and player actions.
+		Also holds the game deck/ main deck.
 */
 
 //Game class definition.
@@ -38,20 +41,23 @@ public:
 	sf::RenderWindow& getWindow();  //Returns a reference to the game window.
 
 private:
-	Deck* m_gameDeck;				//Pointer to the game/ main deck.
 	sf::RenderWindow m_window;		//Game window.
+	sf::RectangleShape* m_menuBox;	//The rectangle that holds menu buttons (quit and play)
+	sf::Sprite* m_cardBack;			//The sprite of a face down card.
+	sf::Sprite* m_animationCard;	//A sprite used for card animations.
 	Player* m_playerObj;			//Player object
 	Dealer* m_dealerObj;			//Dealer object
+	Deck* m_gameDeck;				//Pointer to the game/ main deck.
 	GameButton* m_hitButton;		//Instance of hit button
 	GameButton* m_standButton;		//Instance of stand button
 	GameButton* m_quitButton;		//Instance of quit button
 	GameButton* m_playButton;		//Instance of play button
-	sf::RectangleShape* m_menuBox;	//The rectangle that holds menu buttons (quit and play)
-	sf::Sprite* m_cardBack;			//The sprite of a face down card.
-	sf::Sprite* m_animationCard;	//A sprite used for card animations.
 
-	//A function to start the main card animation.
+	//Starts the main card animation when someone hits.
 	void startAnimation(const sf::Texture &cardTex, E_personType whoHit, float flyToX, float flyToY);
+
+	//Starts showing a text message at a position.
+	void startGameMessage(const int& x, const int& y, const char* message);
 
 	//Animation variables.
 	int m_animationState;			//Animation for when you get a card.
@@ -62,7 +68,11 @@ private:
 	float m_animToY;				//^^
 	E_personType m_animHitPerson;	//Enum for if a card animation belongs to the player or the dealer.
 
-	sf::Text gameMessage;			//A message that shows the status of the game.
+	//Game message variables.
+	int m_gameMessageState;			//Animation state of game message (none, fade in, fade out)
+	int m_gameMessageSpeed;			//Speed of fade out and in animation.
+	sf::Text m_gameMessage;			//A message that shows the status of the game.
+
 	bool m_playing;					//Boolean for if you are playing or in the menu.
 };
 

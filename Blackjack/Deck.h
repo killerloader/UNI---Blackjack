@@ -4,6 +4,13 @@
 
 #include <vector>
 
+/*
+	Deck.h/ Deck.cpp
+		Is a container that acts like a deck of cards, you can take cards from 
+		a deck and add it to another.
+		Also has other functions that help with drawing the deck.
+*/
+
 //Card/ Game class pre-declaration.
 class Card;
 class Game;
@@ -15,7 +22,7 @@ public:
 	Deck(Game &gamePtr_);							//Constructor (takes pointer to game class)
 	~Deck();										//Destructor
 	void shuffle();									//Shuffles the cards in the deck.
-	Card* takeFromDeck(Deck &otherDeck);				//Takes a card from another deck, and adds it to this one.
+	Card* takeFromDeck(Deck &otherDeck);			//Takes a card from another deck, and adds it to this one.
 	void generateMainDeck();						//Generates the main deck (should only be used once)
 	void clearDeck();								//Empties the deck and deletes everything inside.
 	void drawDeck(int, int, int);					//draws the cards in the deck to the game surface.
@@ -29,7 +36,7 @@ public:
 
 private:
 	Game &m_gameRef;					//Reference to game class.
-	std::vector<Card*> m_myDeck;
+	std::vector<Card*> m_myDeck;		//Vector (dynamic array) that holds pointers to each card in the deck.
 	sf::RectangleShape m_valueRect;		//The rectangle that contains the total text.
 	sf::Text m_totalText;				//A cached version of the total, but in sf::Text format (drawable)
 	int m_cachedTotal;					//A cached version of the total, so it does not need to be calcualted every time.

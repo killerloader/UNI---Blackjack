@@ -28,32 +28,38 @@ Game::Game()
 	//Create class pointers
 	m_gameDeck = new Deck(*this);
 
+	//Create person objects (dealer and player)
 	m_playerObj = new Player(*this);
 	m_dealerObj = new Dealer(*this);
 
+	//Create buttons
 	m_hitButton = new GameButton(*this, 260, 430, 64, 25, "Hit", 20, sf::Color::Red, sf::Color::Green, sf::Color::Blue, true);
 	m_standButton = new GameButton(*this, 380, 430, 64, 25, "Stand", 20, sf::Color::Red, sf::Color::Green, sf::Color::Blue, true);
 	m_quitButton = new GameButton(*this, 320, 220, 64, 25, "Quit", 20, sf::Color::Red, sf::Color::Green, sf::Color::Blue, true);
 	m_playButton = new GameButton(*this, 320, 260, 64, 25, "Play", 20, sf::Color::Red, sf::Color::Green, sf::Color::Blue, true);
 
+	//Create menubox rectangle.
 	m_menuBox = new sf::RectangleShape(sf::Vector2f(200,100));
 	m_menuBox->setPosition(220, 190);
 	m_menuBox->setFillColor(sf::Color(0, 0, 0, 150));
 
+	//Set playing to false so you start at the menu.
 	m_playing = false;
 
-	Resources::instance().findTexture("Card:Back")->setSmooth(true);
-
+	//Create the face down card sprite.
 	m_cardBack = new sf::Sprite(*Resources::instance().findTexture("Card:Back"));
 	m_cardBack->setOrigin((float)((int)m_cardBack->getLocalBounds().width / 2), (float)((int)m_cardBack->getLocalBounds().height / 2));
 	m_cardBack->setPosition(540, 240);
 
+	//Create the card that will be used for card animations when hitting.
 	m_animationCard = new sf::Sprite();
 	m_animAccel = 0.2f;
 	m_animExpandSpeed = 0.08f;
 
-	//Start the game, which will generate the main deck, and clear the player decks (which should be clear already)
-	//startGame();
+	//Create the drawable text that will be used for displaying messages.
+	m_gameMessage.setFont(Resources::instance().getFont());
+	m_gameMessage.setCharacterSize(40);
+	m_gameMessageSpeed = 4;
 }
 
 //Game class destructor
@@ -65,8 +71,16 @@ Game::~Game()
 	delete m_dealerObj;
 	delete m_hitButton;
 	delete m_standButton;
+	delete m_quitButton;
+	delete m_playButton;
+	delete m_menuBox;
+	delete m_cardBack;
+	delete m_animationCard;
 }
 
+//A function to separate this from the constructor.
+//This sets up positions of the symbols that are rendered to each card.
+//The resources class actually does the rendering.
 void Game::setupSymbolPositions()
 {
 	//Setup symbol positions for cards.
@@ -132,6 +146,7 @@ void Game::run()
 	{
 		sf::Event event;
 
+		//Poll for windows events (closing window button)
 		while (m_window.pollEvent(event))
 		{
 			if (event.type == sf::Event::Closed)
@@ -162,15 +177,40 @@ void Game::draw()
 	//Draw the face down card.
 	m_window.draw(*m_cardBack);
 
+	//Draw the "game message" animation. (Text to display messages)
+	switch (m_gameMessageState)
+	{
+	case 1://Fade in
+		//Increase alpha if it is not completely opaque.
+		if (m_gameMessage.getColor().a + m_gameMessageSpeed >= 255)
+		{
+			m_gameMessage.setColor(sf::Color(0, 0, 0, 255));
+			m_gameMessageState = 2;
+		}
+		else
+			m_gameMessage.setColor(sf::Color(0, 0, 0, m_gameMessage.getColor().a + m_gameMessageSpeed));
+		break;
+	case 2://Fade out
+		//Decrease alpha if it is not completely transparent.
+		if (m_gameMessage.getColor().a - m_gameMessageSpeed <= 0)
+			m_gameMessageState = 0;		
+
+		m_gameMessage.setColor(sf::Color(0, 0, 0, m_gameMessage.getColor().a - m_gameMessageSpeed));
+		break;
+	}
+
+	//Draw the "game message" text if it's state does not equal 0.
+	if (m_gameMessageState)
+		m_window.draw(m_gameMessage);
+
 	//Draw card animation for when a player hits.
 	switch (m_animationState)//Animating (not == 0)
 	{
-	case 0://Empty case
-		break;
-
 	case 1://Expanding
+		//Increase scale
 		m_animationCard->setScale(m_animationCard->getScale().x + m_animExpandSpeed, m_animationCard->getScale().y + m_animExpandSpeed);
 
+		//Check if scale is max, if so, move onto the next animation step.
 		if (m_animationCard->getScale().x >= 1)
 		{
 			m_animationCard->setScale(1, 1);
@@ -179,17 +219,25 @@ void Game::draw()
 		break;
 
 	case 2://Move towards deck.
+	{
+		//Increase speed
 		m_animMoveSpeed += m_animAccel;
 
+		//Calculates the angle from the card to where it has to go to.
 		float direction = atan2f(
 			m_animToY - m_animationCard->getPosition().y
 			,
 			m_animToX - m_animationCard->getPosition().x
-		);
+			);
 
+		//Calculate horizontal and vertical speed.
 		float xSpeed = m_animMoveSpeed*cosf(direction);
 		float ySpeed = m_animMoveSpeed*sinf(direction);
 
+		//Cards will always be moving left, so if the cardgoes more left than it's goto point
+		//then stop moving and add it to the deck.
+		//NOTE: If the deck were to be wide enough that the goto position was actually to the right, this would break, 
+		//but that is not possible due to the minimum value of a deck this size.
 		if (m_animationCard->getPosition().x + xSpeed <= m_animToX)
 		{
 			//Give the card to whoever started the animation.
@@ -198,25 +246,28 @@ void Game::draw()
 			case E_enumPlayer:m_playerObj->hit(); break;
 			case E_enumDealer:m_dealerObj->hit(); break;
 			}
-
+			m_animationCard->setPosition(m_animToX, m_animToY);
 			m_animationState = 0;//End animation.
 		}
+		else
+			m_animationCard->move(xSpeed, ySpeed);
 
-
-		m_animationCard->move(xSpeed, ySpeed);
 		break;
 	}
+	}
 
+	//Draw card if it is currently being animated.
 	if(m_animationState)
 		m_window.draw(*m_animationCard);
 
+	//Draw the menu buttons as we are not playing, and thus, in the menu.
 	if (!m_playing)
 	{
 		m_window.draw(*m_menuBox);
 		m_playButton->draw();
 		m_quitButton->draw();
-	}
-	else if (!m_playerObj->isStanding() && !m_animationState)
+	}//If we are not in the menu, draw the game buttons.
+	else if (!m_playerObj->isStanding() && !m_animationState && !m_gameMessageState)
 	{
 		m_hitButton->draw();
 		m_standButton->draw();
@@ -226,35 +277,73 @@ void Game::draw()
 //A seperate function for the game step/ update.
 void Game::update()
 {
-	if (!m_animationState)
+	//Boolean that check if either the player or the dealer needs to be dealt their first two cards.
+	bool needToDeal =	((m_playerObj->getDeck()->getSize() < 2) && !m_playerObj->isStanding()) ||	//If players turn and needs to be dealt
+						((m_dealerObj->getDeck()->getSize() < 2) && m_playerObj->isStanding());		//If dealers turn and needs to be dealt.
+
+	//If we are not playing, run the buttons' update code.
+	if (!m_playing)
 	{
-		if (!m_playing)
+		//Update buttons.
+		m_playButton->step();
+		m_quitButton->step();
+
+		//If released mouse over quit button, end the game by closing the window.
+		if (m_quitButton->isRelease())
+			m_window.close();
+
+		//Start the game if this button is pressed.
+		if (m_playButton->isRelease())
+			startGame();
+	}
+	else if (needToDeal && !m_animationState) //If a person needs to be dealt two cards, and no card animation is occuring.
+	{
+		//Check if it is the player or the dealer who needs to be dealt cards.
+		if (!m_playerObj->isStanding())//Player needs to be dealt
 		{
-			m_playButton->step();
-			m_quitButton->step();
+			//Save card width and separation just to make it more neat.
+			int cardWidth = 67;//Width of a card.
+			int cardSep = 25;//Card separation.
 
-			if (m_quitButton->isRelease())
-				m_window.close();
+			//Calculates where the new card will be so that the animation places it correctly.
+			int newCardX = 320 + m_playerObj->getDeck()->getWidth(cardSep) / 2 + (cardWidth - cardSep) / 2 - cardWidth / 2;
 
-			if (m_playButton->isRelease())
-				startGame();
+			//Starts the card dealing animation.
+			startAnimation(*(*m_gameDeck)[m_gameDeck->getSize() - 1]->getSprite().getTexture(), E_enumPlayer, (float)newCardX, 310.f + m_cardBack->getLocalBounds().height / 2.f);
 		}
-		else if (!m_playerObj->isStanding())
+		else
 		{
+			//Save card width and separation just to make it more neat.
+			int cardWidth = 67;//Width of a card.
+			int cardSep = 25;//Card separation.
+
+			//Calculates where the new card will be so that the animation places it correctly.
+			int newCardX = 320 + m_dealerObj->getDeck()->getWidth(cardSep) / 2 + (cardWidth - cardSep) / 2 - cardWidth / 2;
+
+			//Starts the card dealing animation.
+			startAnimation(*(*m_gameDeck)[m_gameDeck->getSize() - 1]->getSprite().getTexture(), E_enumDealer, (float)newCardX, 170.f - m_cardBack->getLocalBounds().height / 2.f);
+		}
+	}
+	else if (!m_animationState && !m_gameMessageState)//If there are no card or text animations.
+	{
+		//If it is the player's turn.
+		if (!m_playerObj->isStanding())
+		{
+			//Update the game buttons, as the player can use them now.
 			m_hitButton->step();
 			m_standButton->step();
 
 			if (m_playerObj->isBust())
 			{
-				std::cout << "You have gone bust, therefore you lose." << std::endl;
+				//Show message and end game.
+				startGameMessage(320, 25, "You lose! You went bust.");
 				endGame(); return;
 			}
 
-			//Hit Button
+			//If hit button is pressed (mouse released over it)
 			if (m_hitButton->isRelease())
 			{
-				//Card* animCard = m_playerObj->hit();
-				if (m_gameDeck->getSize() != 0)//Can take a card because not empty.
+				if (m_gameDeck->getSize() != 0)//Can take a card because game deck is not empty.
 				{
 					//Save card width and separation just to make it more neat.
 					int cardWidth = 67;//Width of a card.
@@ -264,29 +353,28 @@ void Game::update()
 					int newCardX = 320 + m_playerObj->getDeck()->getWidth(cardSep) / 2 + (cardWidth - cardSep) / 2 - cardWidth / 2;
 
 					//Starts the card dealing animation.
-					startAnimation(*(*m_gameDeck)[m_gameDeck->getSize() - 1]->getSprite().getTexture(), E_enumPlayer, (float)newCardX, 310.f + (float)m_playerObj->getDeck()->getHeight() / 2.f);
+					startAnimation(*(*m_gameDeck)[m_gameDeck->getSize() - 1]->getSprite().getTexture(), E_enumPlayer, (float)newCardX, 310.f + m_cardBack->getLocalBounds().height / 2.f);
 				}
 			}
 
 			//Stand Button
 			if (m_standButton->isRelease())
 			{
+				//Stop the player's turn and go to the dealers turn.
 				m_playerObj->stand();
-
-				//Deal two cards to the dealer.
-				m_dealerObj->hit();
-				m_dealerObj->hit();
-				std::cout << "Standing..." << std::endl;
+				startGameMessage(320, 25, "Dealer's turn");
 			}
 		}
 		else//Dealers turn.
 		{
 			if (m_dealerObj->isBust())
 			{
-				std::cout << "The dealer has gone bust, and therefore you win!" << std::endl;
+				//Send message about player winning and end game.
+				startGameMessage(320, 25, "You win! The dealer went bust");
 				endGame(); return;
 			}
-
+			
+			//If the dealer's deck is not worth more than the player's, then hit.
 			if (m_dealerObj->getDeck()->calculateTotal() <= m_playerObj->getDeck()->calculateTotal())//Hit until larger or bust.
 			{
 				//Save card width and separation just to make it more neat.
@@ -297,11 +385,12 @@ void Game::update()
 				int newCardX = 320 + m_playerObj->getDeck()->getWidth(cardSep) / 2 + (cardWidth - cardSep) / 2 - cardWidth / 2;
 
 				//Starts the card dealing animation.
-				startAnimation(*(*m_gameDeck)[m_gameDeck->getSize() - 1]->getSprite().getTexture(), E_enumDealer, (float)newCardX,(float)(170 - m_playerObj->getDeck()->getHeight() / 2));
+				startAnimation(*(*m_gameDeck)[m_gameDeck->getSize() - 1]->getSprite().getTexture(), E_enumDealer, (float)newCardX, (float)(170.f - m_cardBack->getLocalBounds().height / 2.f));
 			}
 			else
 			{
-				std::cout << "The dealer gets a better set of cards than you, so he wins." << std::endl;
+				//The dealer's combination of cards was worth more than the player's, and he didn't go bust.
+				startGameMessage(320, 25, "You lose!");
 				endGame();
 			}
 		}
@@ -314,6 +403,8 @@ void Game::endGame()
 	m_playing = false;
 }
 
+//Resets everything to a new game state.
+//Also sends a message saying that it's the player's turn.
 void Game::startGame()
 {
 	//Reset all the decks in the game, and generate a new main deck.
@@ -321,13 +412,12 @@ void Game::startGame()
 	m_dealerObj->reset();
 	m_gameDeck->generateMainDeck();
 
-	//Deal two cards to the player.
-	m_playerObj->hit();
-	m_playerObj->hit();
+	startGameMessage(320, 25, "Your turn!");
 
 	m_playing = true;
 }
 
+//Starts the card animation when a person hits.
 void Game::startAnimation(const sf::Texture& cardTex, E_personType whoHit, float flyToX, float flyToY)
 {
 	m_animationState = 1;//Playing;
@@ -341,6 +431,18 @@ void Game::startAnimation(const sf::Texture& cardTex, E_personType whoHit, float
 	m_animToY = flyToY;
 }
 
+//Starts a message.
+//This message blocks the player or the dealer from doing anything until it's gone.
+//The player/ dealer can still be dealt their first two cards while this is shown.
+void Game::startGameMessage(const int& x, const int& y, const char* message)
+{
+	m_gameMessageState = 1;
+	m_gameMessage.setColor(sf::Color(0,0,0,0));
+	m_gameMessage.setString(message);
+	m_gameMessage.setOrigin(m_gameMessage.getLocalBounds().width / 2 + m_gameMessage.getLocalBounds().left, m_gameMessage.getLocalBounds().height / 2 + m_gameMessage.getLocalBounds().top);//Center the origin.
+	m_gameMessage.setPosition((float)x, (float)y);
+}
+
 //Pretty much same parameters as the window draw function.
 //Allows other classes to draw things simply.
 sf::RenderWindow& Game::getWindow()
@@ -348,6 +450,7 @@ sf::RenderWindow& Game::getWindow()
 	return m_window;
 }
 
+//Returns the main game deck.
 Deck* Game::getMainDeck()
 {
 	return m_gameDeck;

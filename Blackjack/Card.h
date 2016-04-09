@@ -6,7 +6,8 @@ class Game;
 
 /*
 Card.h/ Card.cpp
-	
+	Holds the information of a card, its sprite and its name.
+	Can also generate this information.
 */
 
 class Card

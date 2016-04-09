@@ -7,6 +7,7 @@
 		Nothing is actually different here, it is just for differentiating from the player.
 */
 
+//Derived from person.
 class Dealer : public Person
 {
 public:

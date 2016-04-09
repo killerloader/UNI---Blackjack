@@ -2,13 +2,13 @@
 
 #include<SFML/Graphics.hpp>
 
-class Game;
-
 /*
 Card.h/ Card.cpp
-	Holds the information of a card, its sprite and its name.
-	Can also generate this information.
+Holds the information of a card, its sprite and its name.
+Can also generate this information.
 */
+
+class Game;
 
 class Card
 {

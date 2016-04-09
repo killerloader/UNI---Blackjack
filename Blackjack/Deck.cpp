@@ -151,6 +151,7 @@ void Deck::drawDeck(int x, int y, int sep)
 		//Draw the rectangle and the value of the card inside it.
 		m_valueRect.setPosition((float)x - 44, (float)y);
 
+		//Center text on button.
 		m_totalText.setOrigin(m_totalText.getLocalBounds().left + m_totalText.getLocalBounds().width / 2, m_totalText.getLocalBounds().top + m_totalText.getLocalBounds().height / 2);
 		m_totalText.setPosition(m_valueRect.getPosition().x + m_valueRect.getLocalBounds().width / 2, m_valueRect.getPosition().y + m_valueRect.getLocalBounds().height / 2);
 

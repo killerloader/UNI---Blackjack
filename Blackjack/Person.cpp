@@ -24,13 +24,12 @@ void Person::stand()
 void Person::reset()
 {
 	m_myDeck->clearDeck();
-	m_myDeck = new Deck(m_gameRef);
 	m_standing = false;
 }
 
-void Person::hit()
+Card* Person::hit()
 {
-	m_myDeck->takeFromDeck(*m_gameRef.getMainDeck());
+	return m_myDeck->takeFromDeck(*m_gameRef.getMainDeck());
 }
 
 bool Person::isBust()

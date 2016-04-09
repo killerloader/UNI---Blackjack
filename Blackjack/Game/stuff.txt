@@ -1,1 +1,2 @@
 - Is single deck blackjack (dealer and player uses the same deck)
+- Dealer seems to be stopping on ties when it should be impossible.

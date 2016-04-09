@@ -26,11 +26,11 @@ Deck::~Deck()
 
 //TakeFromDeck() will take cards from another deck (removing them from the other deck and adding them to this deck)
 //could also call this 'drawCard'
-void Deck::takeFromDeck(Deck &otherDeck)
+Card* Deck::takeFromDeck(Deck &otherDeck)
 {
 	//Other deck is empty, so can't take anything.
 	if (otherDeck.m_myDeck.size() <= 0)
-		return;
+		return nullptr;
 
 	//Create temporary copy of last card pointer for the other deck.
 	Card* tempCardPtr = otherDeck.m_myDeck[otherDeck.m_myDeck.size() - 1];
@@ -43,6 +43,8 @@ void Deck::takeFromDeck(Deck &otherDeck)
 
 	m_totalChanged = true;
 	otherDeck.m_totalChanged = true;
+
+	return m_myDeck[m_myDeck.size() - 1];
 }
 
 //Calculate the total of the cards.
@@ -153,8 +155,15 @@ int Deck::getWidth(int separation)
 {
 	if (m_myDeck.size() == 0)
 		return 0;
-	int cardWidth = Resources::instance().findTexture("CardBackground")->getSize().x;
+	int cardWidth = (int)m_myDeck[0]->getSprite().getLocalBounds().width;
 	return cardWidth + separation*(m_myDeck.size()-1);
+}
+
+int Deck::getHeight()
+{
+	if (m_myDeck.size() == 0)
+		return 0;
+	return (int)m_myDeck[0]->getSprite().getLocalBounds().height;
 }
 
 //Will generate the main deck by getting 52 cards and randomizing the order.
@@ -197,6 +206,11 @@ void Deck::shuffle()
 		//Remove this card from other deck. (Don't delete, because the memory is being transferred to this deck)
 		tempDeck.erase(tempDeck.begin() + TakeRand);
 	}
+}
+
+unsigned int Deck::getSize()
+{
+	return m_myDeck.size();
 }
 
 void Deck::clearDeck()

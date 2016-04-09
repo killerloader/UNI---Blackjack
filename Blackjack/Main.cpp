@@ -18,7 +18,7 @@ int main()
 	Game GameObj;
 
 	//Run the function in the Game object which has the game loop in it.
-	GameObj.Run();
+	GameObj.run();
 
 	//Make sure the resource manager gets destroyed.
 	Resources::instance().destroy();

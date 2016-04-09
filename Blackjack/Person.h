@@ -3,6 +3,7 @@
 //Needed?
 class Game;
 class Deck;
+class Card;
 
 class Person
 {
@@ -12,7 +13,7 @@ public:
 
 	void stand();
 	void reset();
-	void hit();
+	Card* hit();
 	bool isBust();
 	bool isStanding();
 	Deck* getDeck();

@@ -24,12 +24,22 @@ Resources::Resources()
 	loadTexture("Data/Jack.png", "JackImage");
 	loadTexture("Data/Queen.png", "QueenImage");
 	loadTexture("Data/King.png", "KingImage");
+	loadTexture("Data/BackOfCard.png", "CardBack");
 
 	//load main font (a windows default font)
 	m_cardFont.loadFromFile("Data/micross.ttf");
 
 	//Create card renderer rendertexture at start so it doesn't have to be created many times.
 	m_CardRenderer.create(67, 91);
+
+	//Create back of card.
+	m_CardRenderer.clear(sf::Color(255, 255, 255, 0));
+	m_CardRenderer.draw(sf::Sprite(*findTexture("CardBackground"), sf::IntRect(0, 0, 67, 91)), sf::BlendNone);
+	sf::Sprite bgTex(*findTexture("CardBack"));
+	bgTex.setPosition(2, 2);
+	m_CardRenderer.draw(bgTex);
+	m_CardRenderer.display();
+	loadTexture(m_CardRenderer.getTexture(), "Card:Back");
 }
 
 //Function to destroy the singleton and call its destructor.

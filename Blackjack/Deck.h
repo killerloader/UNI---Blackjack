@@ -12,21 +12,23 @@ class Game;
 class Deck
 {
 public:
-	Deck(Game &gamePtr_);								//Constructor (takes pointer to game class)
-	~Deck();											//Destructor
-	void shuffle();										//Shuffles the cards in the deck.
-	void takeFromDeck(Deck &otherDeck);					//Takes a card from another deck, and adds it to this one.
-	void generateMainDeck();							//Generates the main deck (should only be used once)
-	void clearDeck();									//Empties the deck and deletes everything inside.
-	void drawDeck(int, int, int);						//draws the cards in the deck to the game surface.
-	void addCard(int CID);								//Could be reference to a pointer, but not much point.
-	int getWidth(int);									//Returns the width of the drawn deck.
+	Deck(Game &gamePtr_);							//Constructor (takes pointer to game class)
+	~Deck();										//Destructor
+	void shuffle();									//Shuffles the cards in the deck.
+	Card* takeFromDeck(Deck &otherDeck);				//Takes a card from another deck, and adds it to this one.
+	void generateMainDeck();						//Generates the main deck (should only be used once)
+	void clearDeck();								//Empties the deck and deletes everything inside.
+	void drawDeck(int, int, int);					//draws the cards in the deck to the game surface.
+	void addCard(int CID);							//Could be reference to a pointer, but not much point.
+	int getWidth(int);								//Returns the width of the drawn deck.
+	int getHeight();								//Returns the height of the deck/ a single card.
+	unsigned int getSize();							//Returns the amount of cards in the deck.
 	int calculateTotal();							//Finds the total worth of the cards in the deck (considers Aces as 1 or 11)
-	Card *getCard(unsigned int ID) const;				//Gets a pointer to a card at a specific place.
-	Card* operator[] (unsigned int ID) const;			//Subscript operator overload
-	Game &m_gameRef;									//Reference to game class.
+	Card *getCard(unsigned int ID) const;			//Gets a pointer to a card at a specific place.
+	Card* operator[] (unsigned int ID) const;		//Subscript operator overload
 
 private:
+	Game &m_gameRef;					//Reference to game class.
 	std::vector<Card*> m_myDeck;
 	sf::RectangleShape m_valueRect;		//The rectangle that contains the total text.
 	sf::Text m_totalText;				//A cached version of the total, but in sf::Text format (drawable)

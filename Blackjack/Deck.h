@@ -1,9 +1,5 @@
 #pragma once
 
-#include <SFML/Graphics.hpp>
-
-#include <vector>
-
 /*
 	Deck.h/ Deck.cpp
 		Is a container that acts like a deck of cards, you can take cards from 
@@ -11,7 +7,10 @@
 		Also has other functions that help with drawing the deck.
 */
 
-//Card/ Game class pre-declaration.
+#include <SFML/Graphics.hpp>
+
+#include <vector>
+
 class Card;
 class Game;
 
@@ -22,7 +21,6 @@ public:
 	Deck(Game &gamePtr_);							//Constructor (takes pointer to game class)
 	~Deck();										//Destructor
 	void shuffle();									//Shuffles the cards in the deck.
-	Card* takeFromDeck(Deck &otherDeck);			//Takes a card from another deck, and adds it to this one.
 	void generateMainDeck();						//Generates the main deck (should only be used once)
 	void clearDeck();								//Empties the deck and deletes everything inside.
 	void drawDeck(int, int, int);					//draws the cards in the deck to the game surface.
@@ -33,6 +31,7 @@ public:
 	int calculateTotal();							//Finds the total worth of the cards in the deck (considers Aces as 1 or 11)
 	Card *getCard(unsigned int ID) const;			//Gets a pointer to a card at a specific place.
 	Card* operator[] (unsigned int ID) const;		//Subscript operator overload
+	Card* takeFromDeck(Deck &otherDeck);			//Takes a card from another deck, and adds it to this one.
 
 private:
 	Game &m_gameRef;					//Reference to game class.

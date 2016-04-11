@@ -1,9 +1,5 @@
 #pragma once
 
-class Game;
-class Deck;
-class Card;
-
 /*
 	Person.h/ Person.cpp
 		Base class of a blackjack player.
@@ -11,6 +7,10 @@ class Card;
 		The class holds a deck (which is a hand of cards)
 		And it holds their status (whether they are standing or bust or neither)
 */
+
+class Game;
+class Deck;
+class Card;
 
 class Person
 {

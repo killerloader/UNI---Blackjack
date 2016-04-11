@@ -31,3 +31,6 @@ Blackjack/Game/vc140.pdb
 *.tlog
 Blackjack/Game/Data/WorkingFiles/
 Blackjack/BuildStuff/vc140.idb
+Blackjack/Game/WorkingFiles/
+Blackjack/BuildStuff/
+*.lastcodeanalysissucceeded

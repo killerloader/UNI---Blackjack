@@ -1,7 +1,4 @@
 #pragma once
-#include <SFML/Graphics.hpp>
-
-#include <iostream>
 
 /*
 	Resources.h/ Resources.cpp class
@@ -11,6 +8,10 @@
 
 		All cards are also generated inside this class.
 */
+
+#include <SFML/Graphics.hpp>
+
+#include <iostream>
 
 //Struct that holds formations of symbols for certain cards.
 struct cardFormation

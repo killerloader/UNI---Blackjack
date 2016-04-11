@@ -1,11 +1,12 @@
 #pragma once
-#include <SFML/Graphics.hpp>
 
 /*
 	GameButton.h/ GameButton.cpp
 		A button that can be drawn to the screen.
 		Handles mouse pressing and releasing for button actions.
 */
+
+#include <SFML/Graphics.hpp>
 
 class Game;
 

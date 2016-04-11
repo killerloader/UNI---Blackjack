@@ -1,5 +1,13 @@
 #pragma once
 
+/*
+	Game.h/ Game.cpp
+		Main game class.
+		Pretty much controls everything, holds most of the other objects (although not Resources, as that is a singleton)
+		Draws objects to the screen, animates, updates objects, controls the menu and player actions.
+		Also holds the game deck/ main deck.
+*/
+
 #include <SFML/Graphics.hpp>
 
 #include "Resources.h"
@@ -10,14 +18,6 @@ class Deck;
 class Player;
 class Dealer;
 class GameButton;
-
-/*
-	Game.h/ Game.cpp
-		Main game class.
-		Pretty much controls everything, holds most of the other objects (although not Resources, as that is a singleton)
-		Draws objects to the screen, animates, updates objects, controls the menu and player actions.
-		Also holds the game deck/ main deck.
-*/
 
 //Game class definition.
 enum E_personType

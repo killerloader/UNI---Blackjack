@@ -6,7 +6,7 @@
 #include <math.h>
 
 //Card constructor, generates a name based on its card ID, and gets its texture based on its card ID.
-Card::Card(int cardId, Game &gameRef) : m_gameRef(gameRef)
+Card::Card(const int &cardId, Game &gameRef) : m_gameRef(gameRef)
 {
 	m_myName = nullptr;
 	m_cardId = cardId;
@@ -27,7 +27,7 @@ sf::Sprite& Card::getSprite()
 }
 
 //This function generates a name for the card and sets its sprite to the corrosponding texture in the game resources.
-void Card::generateCard(int cardID)
+void Card::generateCard(const int &cardID)
 {
 	//Create buffers and card variables.
 	char* suit;

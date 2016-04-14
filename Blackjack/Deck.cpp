@@ -207,7 +207,9 @@ void Deck::generateMainDeck()
 void Deck::shuffle()
 {
 	std::vector<Card*> tempDeck(m_myDeck);
+
 	m_myDeck.clear();
+
 	while (tempDeck.size() > 0)
 	{
 		//Get a random card from the deck.

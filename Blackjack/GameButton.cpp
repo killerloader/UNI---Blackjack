@@ -16,8 +16,11 @@ GameButton::GameButton(Game& GRef, int x, int y, int width, int height, const ch
 	//Cast to float to avoid errors, use ints to avoid having things inbetween pixels.
 	m_button.setPosition((float)m_x, (float)m_y);
 	m_button.setSize(sf::Vector2f((float)m_width, (float)m_height));
+
+	//Check if the button should be centered.
 	if (centered)
 		m_button.setOrigin(m_button.getLocalBounds().width / 2, m_button.getLocalBounds().height / 2);
+
 	m_button.setFillColor(m_startColour);
 	m_button.setOutlineColor(sf::Color::Black);
 	m_button.setOutlineThickness(1);

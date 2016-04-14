@@ -265,12 +265,12 @@ void Resources::renderCard(const int& CardID)
 }
 
 //Adds a card to the symbol formations (cards A to 10)
-void Resources::addToCardFormation(int CNum, int x_, int y_)
+void Resources::addToCardFormation(int cardNum, int x, int y)
 {
-	if (CNum < 0 || CNum > 9)//not within A to 10
+	if (cardNum < 0 || cardNum > 9)//not within A to 10
 		return;
 
-	m_cardFormations[CNum].addCoords(x_, y_);
+	m_cardFormations[cardNum].addCoords(x, y);
 }
 
 //Copies one formation to another (as some formations are similar)
@@ -284,12 +284,12 @@ void Resources::copyCardFormation(int sourceNum, int destNum)
 }
 
 //Gets a texture from a file, and adds it to the resources.
-void Resources::loadTexture(const char* FileName, const char* TextureName)
+void Resources::loadTexture(const char* fileName, const char* textureName)
 {
 	m_texResources.push_back(new sf::Texture);
-	m_texResources[m_texResources.size() - 1]->loadFromFile(FileName);
-	m_texNames.push_back(new char[strlen(TextureName) + 1]);
-	strcpy_s(m_texNames[m_texNames.size() - 1], strlen(TextureName) + 1, TextureName);
+	m_texResources[m_texResources.size() - 1]->loadFromFile(fileName);
+	m_texNames.push_back(new char[strlen(textureName) + 1]);
+	strcpy_s(m_texNames[m_texNames.size() - 1], strlen(textureName) + 1, textureName);
 }
 
 //Copies a texture and adds it to the resources.
@@ -301,13 +301,13 @@ void Resources::loadTexture(const sf::Texture& copyTexture, const char* TextureN
 }
 
 //Searches for a texture using a name.
-sf::Texture* Resources::findTexture(const char* SearchName, bool showError)
+sf::Texture* Resources::findTexture(const char* textureName, bool showError)
 {
 	for (unsigned int i = 0; i < m_texNames.size(); i++)
-		if (strcmp(SearchName, m_texNames[i]) == 0)
+		if (strcmp(textureName, m_texNames[i]) == 0)
 			return m_texResources[i];
 
 	if(showError)
-		std::cout << "Unable to find texture: " << SearchName << std::endl;
+		std::cout << "Unable to find texture: " << textureName << std::endl;
 	return nullptr;
 }

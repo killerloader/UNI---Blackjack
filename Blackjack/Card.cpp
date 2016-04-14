@@ -9,15 +9,15 @@
 Card::Card(const int &cardId, Game &gameRef) : m_gameRef(gameRef)
 {
 	m_myName = nullptr;
-	m_cardId = cardId;
+	m_cardID = cardId;
 	generateCard(cardId);
 }
 
 //Copy constructor.
 //Creates new copies of everything. (Uses same texture in resources)
-Card::Card(Card &Ocard, Game &gameRef) : m_gameRef(gameRef)
+Card::Card(Card &otherCard, Game &gameRef) : m_gameRef(gameRef)
 {
-	*this = Ocard;//Use = copy operator to copy Ocard into this card.
+	*this = otherCard;//Use = copy operator to copy Ocard into this card.
 }
 
 //Returns a refernece to the card's sprite.
@@ -33,9 +33,9 @@ void Card::generateCard(const int &cardID)
 	char* suit;
 	char* card;
 	int totalLen(0), suitLen(0), cardLen(0);
-	m_cardId = cardID;
-	m_cardSuit = m_cardId / 13;
-	m_cardNum = m_cardId - m_cardSuit*13;
+	m_cardID = cardID;
+	m_cardSuit = m_cardID / 13;
+	m_cardNum = m_cardID - m_cardSuit*13;
 
 	//Find the name of which suit the card is in.
 	switch (m_cardSuit)
@@ -98,7 +98,7 @@ void Card::generateCard(const int &cardID)
 //Gets the ID of the card (0-51) (all cards in a deck)
 int Card::getCardId()
 {
-	return m_cardId;
+	return m_cardID;
 }
 
 //Retunrs the number of the card (0 to 12 AKA: Ace, 2-10, Jack, Queen, King)
@@ -116,23 +116,23 @@ const char* Card::getName()
 //Copy constructor.
 //Copies information from one card to this one.
 //Might not be very useful when all cards are held as pointers and their pointer is all that gets transferred.
-void Card::operator=(Card &Ocard)//Also copy constructor
+void Card::operator=(Card &otherCard)//Also copy constructor
 {
 	//Delete current name if it has one.
 	if (m_myName != nullptr)
 		delete[] m_myName;//Delete old card name if it is already created (pretty much certain)
 
 	//Create a new char array for the name.
-	m_myName = new char[strlen(Ocard.getName()) + 1];
+	m_myName = new char[strlen(otherCard.getName()) + 1];
 	
 	//Copy other name into this one.
-	strcpy_s(m_myName, strlen(Ocard.getName()) + 1, Ocard.getName());
+	strcpy_s(m_myName, strlen(otherCard.getName()) + 1, otherCard.getName());
 
 	//Copy other stuff.
-	m_cardId = Ocard.m_cardId;
-	m_cardNum = Ocard.m_cardNum;
-	m_cardSuit = Ocard.m_cardSuit;
-	m_mySprite = Ocard.m_mySprite;
+	m_cardID = otherCard.m_cardID;
+	m_cardNum = otherCard.m_cardNum;
+	m_cardSuit = otherCard.m_cardSuit;
+	m_mySprite = otherCard.m_mySprite;
 }
 
 //Card destructor.

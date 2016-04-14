@@ -109,7 +109,7 @@ int Deck::calculateTotal()
 
 //Might not be used as we may only ever move from deck to deck.
 //Creates a new card out of nothingness
-void Deck::addCard(int CID)
+void Deck::addCard(int cardID)
 {
 	//Can't use emplace_back because is a vector of pointers.
 	m_myDeck.push_back(new Card(5, m_gameRef));
@@ -134,14 +134,14 @@ Card* Deck::operator[] (unsigned int ID) const
 }
 
 //Draws each card in the deck to the screen.
-void Deck::drawDeck(int x, int y, int sep)
+void Deck::drawDeck(int x, int y, int separation)
 {
 	calculateTotal();
 
 	//Draw each card in the deck.
 	for (unsigned int i = 0; i < m_myDeck.size(); i++)
 	{
-		m_myDeck[i]->getSprite().setPosition((float)x + i*sep, (float)y);
+		m_myDeck[i]->getSprite().setPosition((float)x + i*separation, (float)y);
 		m_gameRef.getWindow().draw(m_myDeck[i]->getSprite());
 	}
 
@@ -168,7 +168,6 @@ int Deck::getWidth(int separation)
 	int cardWidth = (int)m_myDeck[0]->getSprite().getLocalBounds().width;
 	return cardWidth + separation*(m_myDeck.size()-1);
 }
-
 
 //Get the height of the deck (same as the height of one card, although if the deck is empty, this will be 0)
 int Deck::getHeight()

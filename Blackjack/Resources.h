@@ -26,14 +26,14 @@ struct cardFormation
 class Resources
 {
 public:
-	void loadTexture(const char*, const char*);									//Function for loading texture from a file to resources.
+	void loadTexture(const char* fileName, const char* textureName);			//Function for loading texture from a file to resources.
 	void loadTexture(const sf::Texture& copyTexture, const char* TextureName);	//Overloaded function for copying a texture to resources.
-	void renderCard(const int& CardID);											//Function that renders a card using its card ID to a surface then copies it to the texture resources.
-	void addToCardFormation(int CNum, int x_, int y_);							//Function to add a card formation.
+	void renderCard(const int& cardID);											//Function that renders a card using its card ID to a surface then copies it to the texture resources.
+	void addToCardFormation(int cardNum, int x, int y);							//Function to add a card formation.
 	void copyCardFormation(int sourceNum, int destNum);							//Copies one card formation to another, to make things simpler.
 	void destroy();																//Destroys the singleton.
 	sf::Font& getFont();														//Returns the main game font.
-	sf::Texture* findTexture(const char*, bool = true);							//Function for searching through textures using their names.
+	sf::Texture* findTexture(const char* textureName, bool showError = true);				//Function for searching through textures using their names.
 	static Resources& instance();												//Function for singleton access.
 	~Resources();																//Destructor to clean up the resources.
 

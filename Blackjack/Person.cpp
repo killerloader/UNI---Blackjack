@@ -5,7 +5,7 @@
 #include <iostream>
 
 //Constructor, creates main game class reference and sets status to default (not standing)
-Person::Person(Game& GmRef) : m_gameRef(GmRef)
+Person::Person(Game& gameRef) : m_gameRef(gameRef)
 {
 	m_myDeck = new Deck(m_gameRef);
 	m_standing = false;

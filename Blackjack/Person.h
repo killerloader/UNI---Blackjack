@@ -15,7 +15,7 @@ class Card;
 class Person
 {
 public:
-	Person(Game& GmRef);	//Constructor, uses reference of main game class.
+	Person(Game& gameRef);	//Constructor, uses reference of main game class.
 	~Person();				//Destructor, deletes deck.
 	void stand();			//Sets the person to standing.
 	void reset();			//Resets the player (resets deck and stops standing)

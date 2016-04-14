@@ -2,7 +2,7 @@
 #include <iostream>
 
 //Player constructor, calls Person constructor to give it the main game class reference.
-Player::Player(Game& GmRef) : Person(GmRef)
+Player::Player(Game& gameRef) : Person(GmRef)
 {
 
 }

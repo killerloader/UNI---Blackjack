@@ -1,14 +1,3 @@
-/*
-------------------------------------------------------
-	File Name: Game.cpp
-	Author:	Heath Sargent
-------------------------------------------------------
-	Purpose:
-	Create all game objects/ variables
-	and run all game related code.
-------------------------------------------------------
-*/
-
 #include <sstream>
 
 #include "Game.h"

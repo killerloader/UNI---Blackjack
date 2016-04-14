@@ -14,9 +14,8 @@ class GameButton
 {
 public:
 	//Constructor, takes in everything needed by the button.
-	GameButton(Game& GRef, int x, int y, int width, int height, const char* buttonText, int fontSize, const sf::Color& startColour, const sf::Color& hoverColour, const sf::Color& pressColour, bool centered = false);
+	GameButton(Game& gameRef, int x, int y, int width, int height, const char* buttonText, int fontSize, const sf::Color& startColour, const sf::Color& hoverColour, const sf::Color& pressColour, bool centered = false);
 	
-	~GameButton();		//Destructor.
 	void step();		//Update event for button, polls input.
 	void draw();		//Draw event for button, draws button and text.
 	bool isHover();		//Returns if the mouse is over the button.

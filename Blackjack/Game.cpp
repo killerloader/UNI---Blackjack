@@ -108,9 +108,9 @@ void Game::setupSymbolPositions()
 	Resources::instance().addToCardFormation(7, midX, 59);//14 below midy
 	//9
 	Resources::instance().copyCardFormation(4, 8);
-	Resources::instance().addToCardFormation(8, leftX, 35);
+	Resources::instance().addToCardFormation(8, leftX, 35);//35 is above the middle, allows 4 symbols to fit.
 	Resources::instance().addToCardFormation(8, rightX, 35);
-	Resources::instance().addToCardFormation(8, leftX, 55);
+	Resources::instance().addToCardFormation(8, leftX, 55);//55 is below the middle, allows 4 symbols to fit.
 	Resources::instance().addToCardFormation(8, rightX, 55);
 	//10
 	Resources::instance().copyCardFormation(3, 9);
@@ -211,6 +211,14 @@ void Game::draw()
 	{
 		//Increase speed
 		m_animMoveSpeed += m_animAccel;
+
+		/*
+			------------------------------
+			Uses triganometry tp find the angle to a point, then coverts an angular speed to 
+			horizontal and vertical speeds.
+			See more: https://en.wikipedia.org/wiki/Trigonometry
+			------------------------------
+		*/
 
 		//Calculates the angle from the card to where it has to go to.
 		float direction = atan2f(

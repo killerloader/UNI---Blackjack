@@ -309,5 +309,6 @@ sf::Texture* Resources::findTexture(const char* textureName, bool showError)
 
 	if(showError)
 		std::cout << "Unable to find texture: " << textureName << std::endl;
+
 	return nullptr;
 }

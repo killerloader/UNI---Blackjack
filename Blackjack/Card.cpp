@@ -6,11 +6,11 @@
 #include <math.h>
 
 //Card constructor, generates a name based on its card ID, and gets its texture based on its card ID.
-Card::Card(const int &cardId, Game &gameRef) : m_gameRef(gameRef)
+Card::Card(const int &cardID, Game &gameRef) : m_gameRef(gameRef)
 {
 	m_myName = nullptr;
-	m_cardID = cardId;
-	generateCard(cardId);
+	m_cardID = cardID;
+	generateCard(cardID);
 }
 
 //Copy constructor.
@@ -40,10 +40,10 @@ void Card::generateCard(const int &cardID)
 	//Find the name of which suit the card is in.
 	switch (m_cardSuit)
 	{
-	case 0:suit = new char[6]{ "clubs" }; break;
-	case 1:suit = new char[7]{ "spades" }; break;
-	case 2:suit = new char[7]{ "hearts" }; break;
-	case 3:suit = new char[9]{ "diamonds" }; break;
+	case 0:suit = new char[6]{ "Clubs" }; break;
+	case 1:suit = new char[7]{ "Spades" }; break;
+	case 2:suit = new char[7]{ "Hearts" }; break;
+	case 3:suit = new char[9]{ "Diamonds" }; break;
 	default:suit = new char[6]{ "ERROR" }; break;
 	}
 

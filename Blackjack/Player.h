@@ -13,6 +13,5 @@ class Player : public Person
 {
 public:
 	Player(Game& gameRef);	//Constructor
-	~Player();				//Destructor
 };
 

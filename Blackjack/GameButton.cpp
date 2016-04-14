@@ -2,7 +2,7 @@
 #include "Game.h"
 
 //Gamebutton constructor, takes a few arguments which basically define how it will behave.
-GameButton::GameButton(Game& GRef, int x, int y, int width, int height, const char* buttonText, int fontSize, const sf::Color& startColour, const sf::Color& hoverColour, const sf::Color& pressColour, bool centered) : m_gameRef(GRef)
+GameButton::GameButton(Game& gameRef, int x, int y, int width, int height, const char* buttonText, int fontSize, const sf::Color& startColour, const sf::Color& hoverColour, const sf::Color& pressColour, bool centered) : m_gameRef(gameRef)
 {
 	m_x = x;
 	m_y = y;
@@ -36,12 +36,6 @@ GameButton::GameButton(Game& GRef, int x, int y, int width, int height, const ch
 	m_MBLDown = false;
 	m_MBLPressed = false;
 	m_MBLReleased = false;
-}
-
-//Destructor.
-GameButton::~GameButton()
-{
-
 }
 
 //Draw the button and the text that goes on it.

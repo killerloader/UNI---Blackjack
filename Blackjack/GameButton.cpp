@@ -33,9 +33,9 @@ GameButton::GameButton(Game& gameRef, int x, int y, int width, int height, const
 	m_buttonText.setPosition(m_x - m_button.getOrigin().x + m_width / 2.f, m_y - m_button.getOrigin().y + m_height / 2.f);
 
 	//Define input (mouse button left)
-	m_MBLDown = false;
-	m_MBLPressed = false;
-	m_MBLReleased = false;
+	m_mBLDown = false;
+	m_mBLPressed = false;
+	m_mBLReleased = false;
 }
 
 //Draw the button and the text that goes on it.
@@ -50,13 +50,13 @@ void GameButton::draw()
 void GameButton::step()
 {
 	//The first time the button is pressed "m_MBLDown" will be false, so "m_MBLPressed" will become true.
-	m_MBLPressed = (sf::Mouse::isButtonPressed(sf::Mouse::Left) && !m_MBLDown);
-	m_MBLReleased = (!sf::Mouse::isButtonPressed(sf::Mouse::Left) && m_MBLDown);
-	m_MBLDown = sf::Mouse::isButtonPressed(sf::Mouse::Left);
+	m_mBLPressed = (sf::Mouse::isButtonPressed(sf::Mouse::Left) && !m_mBLDown);
+	m_mBLReleased = (!sf::Mouse::isButtonPressed(sf::Mouse::Left) && m_mBLDown);
+	m_mBLDown = sf::Mouse::isButtonPressed(sf::Mouse::Left);
 
 	if (isHover())
 	{
-		if (m_MBLDown)
+		if (m_mBLDown)
 			m_button.setFillColor(m_pressColour);
 		else
 			m_button.setFillColor(m_hoverColour);
@@ -78,11 +78,11 @@ bool GameButton::isHover()
 //Checks if the left mouse button was pressed, and the mouse was hovering over the button.
 bool GameButton::isPress()
 {
-	return (isHover() && m_MBLPressed);
+	return (isHover() && m_mBLPressed);
 }
 
 //Checks if the left mouse button was released, and the mouse was hovering over the button.
 bool GameButton::isRelease()
 {
-	return (isHover() && m_MBLReleased);
+	return (isHover() && m_mBLReleased);
 }

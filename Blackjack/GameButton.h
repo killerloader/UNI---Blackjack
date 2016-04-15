@@ -27,9 +27,9 @@ private:
 	Game& m_gameRef;				//Reference to main game object.
 	sf::RectangleShape m_button;	//Drawable rectangle for the button.
 	sf::Text m_buttonText;			//Text that goes with the button. In drawable format.
-	bool m_MBLDown;					//Keeps track of if MBL is held down.
-	bool m_MBLPressed;				//Is true for one frame after MBL is pressed.
-	bool m_MBLReleased;				//Is true for one frame after MBL is pressed.
+	bool m_mBLDown;					//Keeps track of if MBL is held down.
+	bool m_mBLPressed;				//Is true for one frame after MBL is pressed.
+	bool m_mBLReleased;				//Is true for one frame after MBL is pressed.
 
 	//Colours of the button depending on certain situations.
 	sf::Color m_startColour, m_hoverColour, m_pressColour;

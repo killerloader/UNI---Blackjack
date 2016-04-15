@@ -69,9 +69,9 @@ private:
 	E_personType m_animHitPerson;	//Enum for if a card animation belongs to the player or the dealer.
 
 	//Game message variables.
+	sf::Text m_gameMessage;			//A message that shows the status of the game.
 	int m_gameMessageState;			//Animation state of game message (none, fade in, fade out)
 	int m_gameMessageSpeed;			//Speed of fade out and in animation.
-	sf::Text m_gameMessage;			//A message that shows the status of the game.
 
 	bool m_playing;					//Boolean for if you are playing or in the menu.
 };

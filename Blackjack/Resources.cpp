@@ -30,16 +30,16 @@ Resources::Resources()
 	m_cardFont.loadFromFile("Data/micross.ttf");
 
 	//Create card renderer rendertexture at start so it doesn't have to be created many times.
-	m_CardRenderer.create(67, 91);
+	m_cardRenderer.create(67, 91);
 
 	//Create back of card.
-	m_CardRenderer.clear(sf::Color(255, 255, 255, 0));
-	m_CardRenderer.draw(sf::Sprite(*findTexture("CardBackground"), sf::IntRect(0, 0, 67, 91)), sf::BlendNone);
+	m_cardRenderer.clear(sf::Color(255, 255, 255, 0));
+	m_cardRenderer.draw(sf::Sprite(*findTexture("CardBackground"), sf::IntRect(0, 0, 67, 91)), sf::BlendNone);
 	sf::Sprite bgTex(*findTexture("CardBack"));
 	bgTex.setPosition(2, 2);
-	m_CardRenderer.draw(bgTex);
-	m_CardRenderer.display();
-	loadTexture(m_CardRenderer.getTexture(), "Card:Back");
+	m_cardRenderer.draw(bgTex);
+	m_cardRenderer.display();
+	loadTexture(m_cardRenderer.getTexture(), "Card:Back");
 }
 
 //Function to destroy the singleton and call its destructor.
@@ -93,7 +93,7 @@ void Resources::renderCard(const int& CardID)
 		return;
 
 	//Clear the rendertexture so it can be used with a new card.
-	m_CardRenderer.clear(sf::Color(255,255,255,0));
+	m_cardRenderer.clear(sf::Color(255,255,255,0));
 	sf::Sprite tempSpr(*findTexture("CardBackground"));
 	sf::Sprite cardSuitBig, cardSuitSmall;
 
@@ -151,11 +151,11 @@ void Resources::renderCard(const int& CardID)
 	cardSuitSmall.setOrigin((cardSuitSmall.getLocalBounds().width - 1) / 2, (cardSuitSmall.getLocalBounds().height - 1) / 2);
 
 	//Clear the render texture/ buffer (as you would clear the screen)
-	m_CardRenderer.clear();
+	m_cardRenderer.clear();
 
 	//Draw the base of the card, just a blank canvas.
 	//Blend mode "None" so that the transparency of the corners are kept.
-	m_CardRenderer.draw(tempSpr, sf::BlendNone);
+	m_cardRenderer.draw(tempSpr, sf::BlendNone);
 
 	//We have less space with Q J and K due to their image, so give separate coordinates for them.
 	int borderItemPos[2]{ 6, 61 };//Initiate with 
@@ -176,7 +176,7 @@ void Resources::renderCard(const int& CardID)
 			else
 				cardSuitBig.setScale(1, 1);//Default
 
-			m_CardRenderer.draw(cardSuitBig);
+			m_cardRenderer.draw(cardSuitBig);
 		}
 	}
 	else//Is a Jack, Queen or King
@@ -186,7 +186,7 @@ void Resources::renderCard(const int& CardID)
 
 		//Set its position using int literals.
 		innerOutlineSpr.setPosition(12, 11);
-		m_CardRenderer.draw(innerOutlineSpr);
+		m_cardRenderer.draw(innerOutlineSpr);
 
 		//Select the appropriate image for the appropriate card.
 		sf::Sprite innerCardImage;
@@ -201,30 +201,30 @@ void Resources::renderCard(const int& CardID)
 		}
 		//Draw the image inside the inner outline.
 		innerCardImage.setPosition(13, 12);
-		m_CardRenderer.draw(innerCardImage);
+		m_cardRenderer.draw(innerCardImage);
 
 		//Kings are flipped, so we draw the inner suit symbols on opposite ends.
 		if (cardNum == 12)
 		{
 			//Draw top inner small suit.
 			cardSuitSmall.setPosition(19.f, 20.f);
-			m_CardRenderer.draw(cardSuitSmall);
+			m_cardRenderer.draw(cardSuitSmall);
 
 			//Draw bottom inner small suit.
 			cardSuitSmall.setPosition(47.f, 70.f);
 			cardSuitSmall.setScale(1, -1);
-			m_CardRenderer.draw(cardSuitSmall);
+			m_cardRenderer.draw(cardSuitSmall);
 		}
 		else//Not a king
 		{
 			//Draw top inner small suit.
 			cardSuitSmall.setPosition(47.f, 20.f);
-			m_CardRenderer.draw(cardSuitSmall);
+			m_cardRenderer.draw(cardSuitSmall);
 
 			//Draw bottom inner small suit.
 			cardSuitSmall.setPosition(19.f, 70.f);
 			cardSuitSmall.setScale(1, -1);
-			m_CardRenderer.draw(cardSuitSmall);
+			m_cardRenderer.draw(cardSuitSmall);
 		}
 
 		//Reset scale, as it gets used later.
@@ -233,12 +233,12 @@ void Resources::renderCard(const int& CardID)
 
 	//Draw top left small suit.
 	cardSuitSmall.setPosition((float)borderItemPos[0], 23.f);
-	m_CardRenderer.draw(cardSuitSmall);
+	m_cardRenderer.draw(cardSuitSmall);
 
 	//Draw bottom right small suit.
 	cardSuitSmall.setPosition((float)borderItemPos[1], 68.f);
 	cardSuitSmall.setScale(-1,-1);
-	m_CardRenderer.draw(cardSuitSmall);
+	m_cardRenderer.draw(cardSuitSmall);
 
 	//Setup and draw the number/letter associated with the card.
 	sf::Text cardNumberString(cardSymbol, m_cardFont, 13);
@@ -249,16 +249,16 @@ void Resources::renderCard(const int& CardID)
 	cardNumberString.setOrigin((cardNumberString.getLocalBounds().width-1) / 2, (cardNumberString.getLocalBounds().height-1) / 2);
 	cardNumberString.setPosition((float)borderItemPos[0], 8.f);
 	
-	m_CardRenderer.draw(cardNumberString);
+	m_cardRenderer.draw(cardNumberString);
 	cardNumberString.setPosition((float)borderItemPos[1], 83.f);
 	cardNumberString.setScale(-1,-1);
-	m_CardRenderer.draw(cardNumberString);
+	m_cardRenderer.draw(cardNumberString);
 
 	//Display the temportary render texture, as it is ready to be used.
-	m_CardRenderer.display();
+	m_cardRenderer.display();
 
 	//Save this new sprite as a texture resource. Use stringstream to create its assigned name.
-	loadTexture(m_CardRenderer.getTexture(), tempStream.str().c_str());
+	loadTexture(m_cardRenderer.getTexture(), tempStream.str().c_str());
 
 	//Delete temporary cardSymbol variable.
 	delete[] cardSymbol;

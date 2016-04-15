@@ -126,7 +126,7 @@ void Game::setupSymbolPositions()
 void Game::run()
 {
 	//Creates a window that will be used for displaying sprites.
-	m_window.create(sf::VideoMode(640, 480), "Blackjack");
+	m_window.create(sf::VideoMode(640, 480), "Blackjack", !sf::Style::Resize | sf::Style::Titlebar | sf::Style::Close);
 	m_window.setFramerateLimit(60);
 	m_window.setVerticalSyncEnabled(false);
 

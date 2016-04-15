@@ -14,11 +14,11 @@ int main()
 	//Randomize srand so that the deck is always different.
 	srand((unsigned int)time(0));
 
-	//Create the main game object.
-	Game GameObj;
-
 	//Run the function in the Game object which has the game loop in it.
-	GameObj.run();
+	Game::instance().run();
+
+	//Destroy the game singleton instance.
+	Game::instance().destroy();
 
 	//Make sure the resource manager gets destroyed.
 	Resources::instance().destroy();

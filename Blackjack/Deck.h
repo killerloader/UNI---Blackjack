@@ -18,7 +18,7 @@ class Game;
 class Deck
 {
 public:
-	Deck(Game &gameRef);							//Constructor (takes pointer to game class)
+	Deck();							//Constructor (takes pointer to game class)
 	~Deck();										//Destructor
 	void shuffle();									//Shuffles the cards in the deck.
 	void generateMainDeck();						//Generates the main deck (should only be used once)
@@ -34,7 +34,6 @@ public:
 	Card* takeFromDeck(Deck &otherDeck);			//Takes a card from another deck, and adds it to this one.
 
 private:
-	Game &m_gameRef;					//Reference to game class.
 	std::vector<Card*> m_myDeck;		//Vector (dynamic array) that holds pointers to each card in the deck.
 	sf::RectangleShape m_valueRect;		//The rectangle that contains the total text.
 	sf::Text m_totalText;				//A cached version of the total, but in sf::Text format (drawable)

@@ -14,7 +14,7 @@ class GameButton
 {
 public:
 	//Constructor, takes in everything needed by the button.
-	GameButton(Game& gameRef, int x, int y, int width, int height, const char* buttonText, int fontSize, const sf::Color& startColour, const sf::Color& hoverColour, const sf::Color& pressColour, bool centered = false);
+	GameButton(int x, int y, int width, int height, const char* buttonText, int fontSize, const sf::Color& startColour, const sf::Color& hoverColour, const sf::Color& pressColour, bool centered = false);
 	
 	void step();		//Update event for button, polls input.
 	void draw();		//Draw event for button, draws button and text.
@@ -24,7 +24,6 @@ public:
 
 private:
 	int m_x, m_y, m_width, m_height;//Button dimensions.
-	Game& m_gameRef;				//Reference to main game object.
 	sf::RectangleShape m_button;	//Drawable rectangle for the button.
 	sf::Text m_buttonText;			//Text that goes with the button. In drawable format.
 	bool m_mBLDown;					//Keeps track of if MBL is held down.

@@ -8,14 +8,13 @@
 		And it holds their status (whether they are standing or bust or neither)
 */
 
-class Game;
 class Deck;
 class Card;
 
 class Person
 {
 public:
-	Person(Game& gameRef);	//Constructor, uses reference of main game class.
+	Person();				//Constructor
 	~Person();				//Destructor, deletes deck.
 	void stand();			//Sets the person to standing.
 	void reset();			//Resets the player (resets deck and stops standing)
@@ -25,7 +24,6 @@ public:
 	Card* hit();			//Takes a card from the game deck and adds it to their deck (also returns a pointer to the card they took)
 
 protected:
-	Game &m_gameRef;		//Main game class reference.
 	Deck* m_myDeck;			//Pointer to own deck/ hand.
 	bool m_standing;		//If the person is standing or not.
 };

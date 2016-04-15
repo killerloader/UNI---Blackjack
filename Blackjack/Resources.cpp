@@ -61,17 +61,18 @@ Resources::~Resources()
 		delete[] m_texNames[i];
 }
 
-//Removes public implicit copy constructor.
-Resources::Resources(Resources& copyFrom) {};
+//Removes implicit copy constructor.
+Resources::Resources(Resources& otherResources) {};
 
-//Removes public implicit copy assignment operator.
-void Resources::operator=(Resources& ORes_) {};
+//Removes implicit copy assignment operator.
+void Resources::operator=(Resources& otherResources) {};
 
 //Singleton access.
 Resources& Resources::instance()
 {
 	if (m_thisInstance == nullptr)
 		m_thisInstance = new Resources();
+
 	return *m_thisInstance;
 }
 

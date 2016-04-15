@@ -13,8 +13,8 @@ class Game;
 class Card
 {
 public:
-	Card(const int &cardID, Game &gameRef);//Main constructor
-	Card(Card &otherCard, Game &gameRef);//Copy constructor.
+	Card(const int &cardID);//Main constructor
+	Card(Card &otherCard);//Copy constructor.
 	~Card();						//Destructor.
 	void operator=(Card &otherCard);	//copy assignment operator.
 	const char* getName();			//Gets the name of the card. ("King of Diamonds", etc)
@@ -28,7 +28,6 @@ private:
 	int m_cardNum;					//2 - 10, ace, jack, queen or king. (0-12)
 	int m_cardSuit;					//Card suit (0 to 3)
 	char *m_myName;					//Stored name of card.
-	Game &m_gameRef;				//Pointer to game class.
 	sf::Sprite m_mySprite;			//Sprite of card (not a copy of its texture though)
 };
 

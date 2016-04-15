@@ -4,10 +4,10 @@
 
 #include <iostream>
 
-//Constructor, creates main game class reference and sets status to default (not standing)
-Person::Person(Game& gameRef) : m_gameRef(gameRef)
+//Constructor, sets status to default (not standing)
+Person::Person()
 {
-	m_myDeck = new Deck(m_gameRef);
+	m_myDeck = new Deck();
 	m_standing = false;
 }
 
@@ -33,7 +33,7 @@ void Person::reset()
 //Takes a card from the main deck and returns a pointer to this card.
 Card* Person::hit()
 {
-	return m_myDeck->takeFromDeck(*m_gameRef.getMainDeck());
+	return m_myDeck->takeFromDeck(*Game::instance().getMainDeck());
 }
 
 //Returns if the person is bust or not.

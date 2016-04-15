@@ -6,7 +6,7 @@
 #include <math.h>
 
 //Card constructor, generates a name based on its card ID, and gets its texture based on its card ID.
-Card::Card(const int &cardID, Game &gameRef) : m_gameRef(gameRef)
+Card::Card(const int &cardID)
 {
 	m_myName = nullptr;
 	m_cardID = cardID;
@@ -15,7 +15,7 @@ Card::Card(const int &cardID, Game &gameRef) : m_gameRef(gameRef)
 
 //Copy constructor.
 //Creates new copies of everything. (Uses same texture in resources)
-Card::Card(Card &otherCard, Game &gameRef) : m_gameRef(gameRef)
+Card::Card(Card &otherCard)
 {
 	*this = otherCard;//Use = copy operator to copy Ocard into this card.
 }

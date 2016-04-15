@@ -8,6 +8,31 @@
 #include "Resources.h"
 #include "GameButton.h"
 
+//Set singleton instance to nullptr.
+Game* Game::m_thisInstance = nullptr;
+
+//Get singleton function
+Game& Game::instance()
+{
+	if (m_thisInstance == nullptr)
+		m_thisInstance = new Game();
+
+	return *m_thisInstance;
+}
+
+//Function to destroy the singleton and call its destructor.
+void Game::destroy()
+{
+	delete this;				//Delete self and call destructor.
+	m_thisInstance = nullptr;	//Set static singleton instance to nullptr.
+}
+
+//Removes implicit copy constructor.
+Game::Game(Game& otherGame) {};
+
+//Removes implicit copy assignment operator.
+void Game::operator=(Game& otherGame) {};
+
 //Game class constructor with initializer list for Deck class object which needs to call its constructor.
 Game::Game()
 {
@@ -15,17 +40,17 @@ Game::Game()
 	setupSymbolPositions();
 
 	//Create class pointers
-	m_gameDeck = new Deck(*this);
+	m_gameDeck = new Deck();
 
 	//Create person objects (dealer and player)
-	m_playerObj = new Player(*this);
-	m_dealerObj = new Dealer(*this);
+	m_playerObj = new Player();
+	m_dealerObj = new Dealer();
 
 	//Create buttons
-	m_hitButton = new GameButton(*this, 260, 430, 64, 25, "Hit", 20, sf::Color::Red, sf::Color::Green, sf::Color::Blue, true);
-	m_standButton = new GameButton(*this, 380, 430, 64, 25, "Stand", 20, sf::Color::Red, sf::Color::Green, sf::Color::Blue, true);
-	m_quitButton = new GameButton(*this, 320, 220, 64, 25, "Quit", 20, sf::Color::Red, sf::Color::Green, sf::Color::Blue, true);
-	m_playButton = new GameButton(*this, 320, 260, 64, 25, "Play", 20, sf::Color::Red, sf::Color::Green, sf::Color::Blue, true);
+	m_hitButton = new GameButton(260, 430, 64, 25, "Hit", 20, sf::Color::Red, sf::Color::Green, sf::Color::Blue, true);
+	m_standButton = new GameButton(380, 430, 64, 25, "Stand", 20, sf::Color::Red, sf::Color::Green, sf::Color::Blue, true);
+	m_quitButton = new GameButton(320, 220, 64, 25, "Quit", 20, sf::Color::Red, sf::Color::Green, sf::Color::Blue, true);
+	m_playButton = new GameButton(320, 260, 64, 25, "Play", 20, sf::Color::Red, sf::Color::Green, sf::Color::Blue, true);
 
 	//Create menubox rectangle.
 	m_menuBox = new sf::RectangleShape(sf::Vector2f(200,100));
@@ -277,7 +302,6 @@ void Game::update()
 	//Boolean that check if either the player or the dealer needs to be dealt their first two cards.
 	bool needToDeal =	((m_playerObj->getDeck()->getSize() < 2) && !m_playerObj->isStanding()) ||	//If players turn and needs to be dealt
 						((m_dealerObj->getDeck()->getSize() < 2) && m_playerObj->isStanding());		//If dealers turn and needs to be dealt.
-
 	//If we are not playing, run the buttons' update code.
 	if (!m_playing)
 	{

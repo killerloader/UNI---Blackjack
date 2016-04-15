@@ -2,7 +2,7 @@
 #include "Game.h"
 
 //Gamebutton constructor, takes a few arguments which basically define how it will behave.
-GameButton::GameButton(Game& gameRef, int x, int y, int width, int height, const char* buttonText, int fontSize, const sf::Color& startColour, const sf::Color& hoverColour, const sf::Color& pressColour, bool centered) : m_gameRef(gameRef)
+GameButton::GameButton(int x, int y, int width, int height, const char* buttonText, int fontSize, const sf::Color& startColour, const sf::Color& hoverColour, const sf::Color& pressColour, bool centered)
 {
 	m_x = x;
 	m_y = y;
@@ -41,8 +41,8 @@ GameButton::GameButton(Game& gameRef, int x, int y, int width, int height, const
 //Draw the button and the text that goes on it.
 void GameButton::draw()
 {
-	m_gameRef.getWindow().draw(m_button);
-	m_gameRef.getWindow().draw(m_buttonText);
+	Game::instance().getWindow().draw(m_button);
+	Game::instance().getWindow().draw(m_buttonText);
 }
 
 //Step event of the button.
@@ -69,10 +69,10 @@ void GameButton::step()
 bool GameButton::isHover()
 {
 	//Check if mouse positition is within the box of the button.
-	return (sf::Mouse::getPosition(m_gameRef.getWindow()).x >= m_x - m_button.getOrigin().x &&
-			sf::Mouse::getPosition(m_gameRef.getWindow()).y >= m_y - m_button.getOrigin().y &&
-			sf::Mouse::getPosition(m_gameRef.getWindow()).x <= m_x - m_button.getOrigin().x + m_width &&
-			sf::Mouse::getPosition(m_gameRef.getWindow()).y <= m_y - m_button.getOrigin().y + m_height);
+	return (sf::Mouse::getPosition(Game::instance().getWindow()).x >= m_x - m_button.getOrigin().x &&
+			sf::Mouse::getPosition(Game::instance().getWindow()).y >= m_y - m_button.getOrigin().y &&
+			sf::Mouse::getPosition(Game::instance().getWindow()).x <= m_x - m_button.getOrigin().x + m_width &&
+			sf::Mouse::getPosition(Game::instance().getWindow()).y <= m_y - m_button.getOrigin().y + m_height);
 }
 
 //Checks if the left mouse button was pressed, and the mouse was hovering over the button.

@@ -45,7 +45,7 @@ private:
 	cardFormation m_cardFormations[10];				//Formations of symbols for cards 1 - 10 (10 cards)
 	static Resources* m_thisInstance;				//Singleton instance
 	Resources();									//Private constructor so it can only create itself.
-	Resources(Resources& copyFrom);					//Declare explicit copy constructor.
-	void operator=(Resources& ORes);				//Declare explicit copy assignment operator.
+	Resources(Resources& otherResources);					//Declare explicit copy constructor.
+	void operator=(Resources& otherResources);				//Declare explicit copy assignment operator.
 };
 

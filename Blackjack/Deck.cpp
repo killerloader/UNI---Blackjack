@@ -4,8 +4,8 @@
 
 #include <iostream>
 
-//Deck constructor, takes a refernce to the main game project.
-Deck::Deck(Game &gameRef) : m_gameRef(gameRef)
+//Deck constructor
+Deck::Deck()
 {
 	//Setup cache for the total value of the deck.
 	m_cachedTotal = 0;
@@ -112,7 +112,7 @@ int Deck::calculateTotal()
 void Deck::addCard(int cardID)
 {
 	//Can't use emplace_back because is a vector of pointers.
-	m_myDeck.push_back(new Card(5, m_gameRef));
+	m_myDeck.push_back(new Card(5));
 
 	//The total has changed, so the value cache is invalid.
 	m_totalChanged = true;
@@ -142,7 +142,7 @@ void Deck::drawDeck(int x, int y, int separation)
 	for (unsigned int i = 0; i < m_myDeck.size(); i++)
 	{
 		m_myDeck[i]->getSprite().setPosition((float)x + i*separation, (float)y);
-		m_gameRef.getWindow().draw(m_myDeck[i]->getSprite());
+		Game::instance().getWindow().draw(m_myDeck[i]->getSprite());
 	}
 
 	//Check if deck is not empty.
@@ -155,8 +155,8 @@ void Deck::drawDeck(int x, int y, int separation)
 		m_totalText.setOrigin(m_totalText.getLocalBounds().left + m_totalText.getLocalBounds().width / 2, m_totalText.getLocalBounds().top + m_totalText.getLocalBounds().height / 2);
 		m_totalText.setPosition(m_valueRect.getPosition().x + m_valueRect.getLocalBounds().width / 2, m_valueRect.getPosition().y + m_valueRect.getLocalBounds().height / 2);
 
-		m_gameRef.getWindow().draw(m_valueRect);
-		m_gameRef.getWindow().draw(m_totalText);
+		Game::instance().getWindow().draw(m_valueRect);
+		Game::instance().getWindow().draw(m_totalText);
 	}
 }
 
@@ -193,7 +193,7 @@ void Deck::generateMainDeck()
 		Resources::instance().renderCard(i);
 
 		//Create card (Constructor will assign card image to its sprite, so must be done in this order)
-		m_myDeck.push_back(new Card(i, m_gameRef));
+		m_myDeck.push_back(new Card(i));
 	}
 
 	std::cout << "Done!" << std::endl;

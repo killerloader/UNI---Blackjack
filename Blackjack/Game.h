@@ -2,7 +2,7 @@
 
 /*
 	Game.h/ Game.cpp
-		Main game class.
+		Main game class. This is a singleton.
 		Pretty much controls everything, holds most of the other objects (although not Resources, as that is a singleton)
 		Draws objects to the screen, animates, updates objects, controls the menu and player actions.
 		Also holds the game deck/ main deck.
@@ -29,7 +29,6 @@ enum E_personType
 class Game
 {
 public:
-	Game();							//Constructor
 	~Game();						//Destructor
 	void run();						//Game main event.
 	void draw();					//Game draw/ render event.
@@ -39,8 +38,15 @@ public:
 	void endGame();					//Stops the game and opens the menu. (still shows the 
 	Deck* getMainDeck();			//Getter for the game deck.
 	sf::RenderWindow& getWindow();  //Returns a reference to the game window.
+	static Game& instance();		//Function for singleton access.
+	void destroy();					//Destroy singleton
 
 private:
+	Game();							//Private Constructor, because singleton.
+	Game(Game& otherGame);			//Declare explicit copy constructor.
+	void operator=(Game& otherGame);//Declare explicit copy assignment operator.
+	static Game* m_thisInstance;	//Singleton instance
+
 	sf::RenderWindow m_window;		//Game window.
 	sf::RectangleShape* m_menuBox;	//The rectangle that holds menu buttons (quit and play)
 	sf::Sprite* m_cardBack;			//The sprite of a face down card.
